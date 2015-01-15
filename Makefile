@@ -6,7 +6,7 @@
 #    By: sly <sly@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/13 21:00:43 by sly               #+#    #+#              #
-#    Updated: 2015/01/14 21:10:22 by sly              ###   ########.fr        #
+#    Updated: 2015/01/15 20:32:31 by sly              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,21 +31,23 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIB_NAME)
 	$(CC) $(CFLAGS) $(LIBOPTION) $(LIB_NAME) $(INC) -o $(NAME) $(LIB_NAME) $(OBJ)
 
-$(LIB_NAME):
-	make -C libft/ fclean
+$(LIB_NAME): libfclean
 	make -C libft
+
+libfclean:
+	make -C libft/ fclean
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
 	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
-.PHONY: clean $(LIB_NAME) fclean all re norme
+.PHONY: clean $(LIB_NAME) fclean all re norme libfclean
 
 clean:
 	rm -fv $(OBJ)
 	@rmdir $(OBJ_PATH) 2> /dev/null || echo "" > /dev/null
 
-fclean: clean
+fclean: clean libfclean
 	rm -fv $(NAME)
 
 re: fclean
