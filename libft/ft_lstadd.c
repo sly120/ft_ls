@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/28 21:52:45 by sly               #+#    #+#             */
-/*   Updated: 2014/11/28 22:05:50 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:07:53 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void			ft_lstadd(t_list **alst, t_list *new)
 {

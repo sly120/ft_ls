@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 19:07:44 by sly               #+#    #+#             */
-/*   Updated: 2014/11/13 21:03:25 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:19:10 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		ft_putnbr_fd(int n, int fd)
 {

@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/09 18:19:47 by sly               #+#    #+#             */
-/*   Updated: 2014/11/27 05:28:33 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:16:07 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		*ft_memmove(void *dst, const void *src, size_t len)
 {

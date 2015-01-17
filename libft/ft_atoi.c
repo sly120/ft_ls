@@ -6,12 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 17:17:58 by sly               #+#    #+#             */
-/*   Updated: 2014/12/01 05:33:35 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:06:31 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "stdio.h"
+#include "../include/libft.h"
 
 int			ft_atoi(const char *str)
 {

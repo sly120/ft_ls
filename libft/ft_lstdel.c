@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/30 06:13:42 by sly               #+#    #+#             */
-/*   Updated: 2014/11/30 07:47:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:08:08 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		ft_lstdel(t_list **alst, void (*del)(void*, size_t))
 {

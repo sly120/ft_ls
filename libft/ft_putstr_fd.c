@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 17:05:04 by sly               #+#    #+#             */
-/*   Updated: 2014/11/05 17:49:08 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:19:55 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		ft_putstr_fd(char const *s, int fd)
 {

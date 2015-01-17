@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/01 00:48:39 by sly               #+#    #+#             */
-/*   Updated: 2014/12/01 06:01:47 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:09:29 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {

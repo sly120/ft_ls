@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 01:17:27 by sly               #+#    #+#             */
-/*   Updated: 2014/11/24 01:55:01 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:38:06 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 static int			ft_iswhitespace(int c)
 {

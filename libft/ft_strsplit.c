@@ -6,12 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 23:08:12 by sly               #+#    #+#             */
-/*   Updated: 2014/11/27 01:41:02 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:30:05 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "../include/libft.h"
 
 static size_t			ft_subslen(char const *s, char c)
 {

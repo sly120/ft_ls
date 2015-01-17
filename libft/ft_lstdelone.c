@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/28 22:44:02 by sly               #+#    #+#             */
-/*   Updated: 2014/12/01 06:00:36 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:09:00 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void			ft_lstdelone(t_list **alst, void (*del)(void*, size_t))
 {

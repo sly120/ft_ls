@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/28 06:10:55 by sly               #+#    #+#             */
-/*   Updated: 2014/11/28 21:39:58 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:10:15 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 t_list		*ft_lstnew(void const *content, size_t content_size)
 {

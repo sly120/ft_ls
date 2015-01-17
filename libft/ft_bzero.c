@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/06 19:40:26 by sly               #+#    #+#             */
-/*   Updated: 2014/11/08 21:27:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:35:40 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		ft_bzero(void *s, size_t n)
 {

@@ -6,11 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/08 16:32:47 by sly               #+#    #+#             */
-/*   Updated: 2014/11/27 02:28:38 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/17 05:12:42 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 void		*ft_memchr(const void *s, int c, size_t n)
 {
