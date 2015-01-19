@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/01/19 02:11:45 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/19 04:56:57 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 #include <libft.h>
 #include <stdio.h>
 
-static void		ft_errorMessage(char c)
+static void		ft_errorIllegalOption(char c)
 {
 	ft_putstr_fd("ls: illegal option -- ", 2);
 	ft_putchar_fd(c, 2);
 	ft_putstr_fd("\nusage: ls [-Ralrt] [file ...]\n", 2);
+}
+
+static void		ft_errorNonDirectoryOperand(char *s)
+{
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 }
 
 static int		ft_addOption(char **options, char c)
@@ -50,22 +57,25 @@ static int		ft_isOption(char c, char **options)
 	return (0);
 }
 
-static int		ft_readOption(char *arg, char **options)
+static int		ft_readValidOptions(char *arg, char **options)
 {
 	size_t		i;
-	size_t		len;
 	int			ret;
 
 	i = 0;
-	len = ft_strlen(arg);
-	while (++i < len)
+	if (ft_strlen(arg) == 1)
+	{
+		ft_errorNonDirectoryOperand("-");
+		return (-1);
+	}
+	while (++i < ft_strlen(arg))
 	{
 		ret = ft_isOption(arg[i], options);
 		if (ret == 0)
 		{
 			if (i == 1 && arg[i] == '-' && arg[i + 1] == '\0')
 				return (0);
-			ft_errorMessage(arg[i]);
+			ft_errorIllegalOption(arg[i]);
 			return (-1);
 		}
 		else if (ret == -1)
@@ -82,15 +92,21 @@ static int		ft_readArg(int argc, char **argv, char **options)
 	i = 2;
 	while (i <= argc && argv[i - 1][0] == '-')
 	{
-		ret = ft_readOption(argv[i++ - 1], options);
+		ret = ft_readValidOptions(argv[i++ - 1], options);
 		if (ret == -1)
 			return (-1);
 	}
-	if (argc - i >= 0)
-		ft_putstr("ok\n");
+	return (i);
+}
+
+static void		ft_executels(int argc, char **argv, int i, char *options)
+{
+	printf("options:%s\n", options);
+	if (argc >= i)
+		while (argc >= i)
+			ft_putendl(argv[i++ - 1]);
 	else
-		ft_putstr(".\n");
-	return (0);
+		ft_putendl(".");
 }
 
 static void		ft_initOptions(char **options)
@@ -107,10 +123,9 @@ int				main(int argc, char **argv)
 	ft_initOptions(&options);
 	if ((ret = ft_readArg(argc, argv, &options)) == -1)
 	{
-		ft_putstr("ft_readArg error, abort\n");
+		ft_putendl("ft_readArg error, abort");
 		return (1);
 	}
-	printf("options:%s\n", options);
-	//printf("verification options\nl_opt=%d\nR_opt=%d\na_opt=%d\nr_opt=%d\nt_opt=%d\n", options.l_opt, options.R_opt, options.a_opt, options.r_opt, options.t_opt);
+	ft_executels(argc, argv, ret, options);
 	return (0);
 }
