@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/01/19 01:48:15 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/19 06:04:44 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 #define FT_LS_H
 #define OPTION_NB 5
 
-void		hello(void);
+void		ft_run(int argc, char ** argv, int i, char *options);
 #	endif

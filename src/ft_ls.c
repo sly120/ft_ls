@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/01/19 04:56:57 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/19 06:05:23 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,6 @@ static int		ft_readArg(int argc, char **argv, char **options)
 	return (i);
 }
 
-static void		ft_executels(int argc, char **argv, int i, char *options)
-{
-	printf("options:%s\n", options);
-	if (argc >= i)
-		while (argc >= i)
-			ft_putendl(argv[i++ - 1]);
-	else
-		ft_putendl(".");
-}
-
 static void		ft_initOptions(char **options)
 {
 	*options = (char*)malloc(sizeof(char) * (OPTION_NB + 1));
@@ -126,6 +116,6 @@ int				main(int argc, char **argv)
 		ft_putendl("ft_readArg error, abort");
 		return (1);
 	}
-	ft_executels(argc, argv, ret, options);
+	ft_run(argc, argv, ret, options);
 	return (0);
 }
