@@ -6,14 +6,29 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/19 06:00:20 by sly               #+#    #+#             */
-/*   Updated: 2015/01/19 06:39:07 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/20 06:32:56 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <dirent.h>
 #include <libft.h>
+#include <ft_ls.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <stdio.h>
 
-static int			ft_openDir(char *path)
+static int				ft_openTestDir(char *path)
+{
+	struct stat			*buf;
+	int					ret;
+
+	buf = (struct stat*)malloc(sizeof(struct stat));
+	if ((ret = stat(path, buf) == -1))
+		return (-1);
+	printf("mode of %s:%d\n", path, buf->st_mode);
+	return (0);
+}
+
+/*static int			ft_openDir(char *path)
 {
 	DIR				*stream;
 	struct dirent	*dirent;
@@ -27,22 +42,28 @@ static int			ft_openDir(char *path)
 		return (-1);
 	return (0);
 }
+*/
+
+static int			ft_recursiveRun(char *path)
+{
+}
 
 void				ft_run(int argc, char **argv, int i, char *options)
 {
-	if (argc >= i)
-		while (argc >= i)
+	int				temp;
+
+	temp = i;
+	if (argc >= temp)
+		while (argc >= temp)
 		{
-			if (ft_openDir(argv[i++ - 1]) == -1)
-			{
-				ft_putstr(argv[i - 2]);
-				ft_putendl(" error ft_openDir");
-			}
+			if (ft_openTestDir(argv[temp++ - 1]) == -1)
+				ft_errorNonDirectoryOperand(argv[temp - 2]);
 		}
 	else
 	{
+		printf("i:%d et argc:%d\n", i, argc);
 		ft_putendl(".");
-		ft_openDir(".");
+		ft_openTestDir(".");
 	}
 	while (*options)
 		options++;
