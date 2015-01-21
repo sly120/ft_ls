@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/01/20 02:40:19 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/21 03:24:43 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,6 @@ int				main(int argc, char **argv)
 
 	ft_initOptions(&options);
 	ft_run(argc, argv, ft_readArg(argc, argv, &options), options);
+	free(options);
 	return (0);
 }
