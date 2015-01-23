@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/01/21 03:24:43 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/23 04:20:46 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,23 @@ static int		ft_addOption(char **options, char c)
 static int		ft_isOption(char c, char **options)
 {
 	int			i;
+	char		*ref;
 
-	if ((c == 'a') || (c == 'l') || (c == 'r') || (c == 'R') || (c == 't'))
-	{
-		i = 0;
-		while ((*options)[i])
-			if ((*options)[i++] == c)
-				return (1);
-		if (ft_addOption(options, c) == -1)
-			return (-1);
-		return (1);
-	}
+	if (!(ref = (char*)malloc(sizeof(char) * 6)))
+		return (-1);
+	ref = "Ralrt";
+	while (*ref)
+		if (c == *ref++)
+		{
+			i = 0;
+			while ((*options)[i])
+				if ((*options)[i++] == c)
+					return (1);
+			if (ft_addOption(options, c) == -1)
+				return (-1);
+			return (1);
+		}
+	free(ref);
 	return (0);
 }
 

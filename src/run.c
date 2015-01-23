@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/19 06:00:20 by sly               #+#    #+#             */
-/*   Updated: 2015/01/22 07:02:29 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/23 09:01:32 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <ft_ls.h>
 #include <dirent.h>
 #include <sys/stat.h>
+
 #include <stdio.h>
 
 static int				ft_openTestDir(char *path, struct stat **buf)
@@ -48,9 +49,9 @@ static int				ft_openTestDir(char *path, struct stat **buf)
   }
   */
 
-void				ft_dirAdd(t_dir **dirLst, t_dir *newDir)
+static void				ft_dirAdd(t_dir **dirLst, t_dir *newDir)
 {
-	t_dir			*csr;
+	t_dir				*csr;
 
 	if (!dirLst || !newDir)
 		return ;
@@ -65,10 +66,10 @@ void				ft_dirAdd(t_dir **dirLst, t_dir *newDir)
 	}
 }
 
-t_dir				*ft_dirnew(int d_mode, char *d_name)
+static t_dir			*ft_dirnew(int d_mode, char *d_name)
 {
-	t_dir			*tmp;
-	size_t			len;
+	t_dir				*tmp;
+	size_t				len;
 
 	if (!(tmp = (t_dir*)malloc(sizeof(t_dir))))
 		return (NULL);
@@ -82,37 +83,40 @@ t_dir				*ft_dirnew(int d_mode, char *d_name)
 	return (tmp);
 }
 
-t_dir				**ft_t_dirToTab(t_dir **dirLst, int n)
+static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 {
-	t_dir			**tab;
-	t_dir			*csr;
-	int				i;
+	t_dir				**tab;
+	t_dir				*csr;
+	int					i;
 
 	if (!(tab = (t_dir**)malloc(sizeof(t_dir*) * n)))
 		return (NULL);
 	i = 0;
 	csr = *dirLst;
-	while (i < n)
+	printf("coucou:%p, %s\n", csr->next, csr->name);
+	while (csr)
 	{
-		(tab)[i] = csr;
+		tab[i] = csr;
+	printf("tab[i] name:%s\n", (tab[i])->name);
 		csr = csr->next;
+		i++;
 	}
 	return (tab);
 }
 
-void				ft_Sort(t_dir **dirLst)
+void					ft_Sort(t_dir **dirLst)
 {
-	t_dir			*csr;
-	t_dir			**dirTab;
-	int				count;
-	int				i;
+	t_dir				*csr;
+	t_dir				**dirTab;
+	int					count;
+	int					i;
 
 	count = 0;
 	csr = *dirLst;
 	while (csr)
 	{
 		count++;
-		(csr) = (csr)->next;
+		csr = csr->next;
 	}
 	csr = *dirLst;
 	/*while (csr)
@@ -120,21 +124,23 @@ void				ft_Sort(t_dir **dirLst)
 		printf("count:%d, name:%s\n", count, csr->name);
 		csr = csr->next;
 	}*/
-	printf("coucou\n");
 	dirTab = ft_t_dirToTab(dirLst, count);
 	i = 0;
 	while (i < count)
-		printf("name:%s\n", ((dirTab)[i++])->name);
+	{
+		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
+		i++;
+	}
 }
 
-void				ft_run(int argc, char **argv, int i, char *options)
+void					ft_run(int argc, char **argv, int i, char *options)
 {
-	int				temp;
+	int					temp;
 	 /*	dirLst[0]: list of operands which are  not a file nor a directory
 	 *	dirLst[1]: list of files
 	 *	dirLst[2]: list of directories
-	 */	t_dir			*(dirLst)[3];
-	struct stat		*dirRaw;
+	 */	t_dir			*dirLst[3];
+	struct stat			*dirRaw;
 
 	temp = 0;
 	while (temp < 3)
@@ -145,10 +151,10 @@ void				ft_run(int argc, char **argv, int i, char *options)
 		{
 			if (ft_openTestDir(argv[temp++ - 1], &dirRaw) == -1)
 			{
-				ft_dirAdd(&((dirLst)[0]), ft_dirnew(-1, argv[temp - 2]));
+				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
 				//dirLst[0] = ft_dirnew(-1, argv[temp - 2]);
 				//printf("adresse de dirLst[0]:%p\n", dirLst[0]);
-				ft_Sort(&(dirLst[0]));
+				ft_Sort(&dirLst[0]);
 				/*while (dirLst[0])
 				{
 					//printf("coucou\n");
@@ -162,7 +168,8 @@ void				ft_run(int argc, char **argv, int i, char *options)
 			else
 			{
 				dirLst[1] = ft_dirnew(dirRaw->st_mode, argv[temp - 2]);
-				printf("mode:%d, operand name:%s\n", dirLst[1]->mode, dirLst[1]->name);
+				int i = ((dirLst[1]->mode) & (1 << 15)) > 0;
+				printf("Directory test:%d, mode value:%d,  operand name:%s\n", i, dirLst[1]->mode, dirLst[1]->name);
 			}
 		}
 	else
