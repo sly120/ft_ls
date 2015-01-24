@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/19 06:00:20 by sly               #+#    #+#             */
-/*   Updated: 2015/01/23 09:01:32 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/24 06:36:53 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 		return (NULL);
 	i = 0;
 	csr = *dirLst;
-	printf("coucou:%p, %s\n", csr->next, csr->name);
+	//printf("coucou:%p, %s\n", csr->next, csr->name);
 	while (csr)
 	{
 		tab[i] = csr;
@@ -102,6 +102,32 @@ static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 		i++;
 	}
 	return (tab);
+}
+
+void					ft_insertionSort_name(t_dir ***dirTab, int n)
+{
+	int					i;
+	int					j;
+	t_dir				*tempDir;
+
+	i = 1;
+	while (i < n)
+	{
+		tempDir = *dirTab[i];
+		j = i;
+		while ((j > 0) && (ft_strcmp((*dirTab[j - 1])->name, tempDir->name)) > 0)
+		{
+			*dirTab[j] = *dirTab[j - 1];
+			j--;
+		}
+		*dirTab[j] = tempDir;
+	}
+		/*relink
+		i = 0;
+		while (i++ < n - 1)
+			(*dirTab[i])->next = *dirTab[i + 1];
+		(*dirTab[n])->next = NULL;
+		**dirTab = *dirTab[0];*/
 }
 
 void					ft_Sort(t_dir **dirLst)
@@ -131,6 +157,13 @@ void					ft_Sort(t_dir **dirLst)
 		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
 		i++;
 	}
+	ft_insertionSort_name(&dirTab, count);
+	/*i = 0;
+	while (i < count)
+	{
+		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
+		i++;
+	}*/
 }
 
 void					ft_run(int argc, char **argv, int i, char *options)
@@ -153,7 +186,7 @@ void					ft_run(int argc, char **argv, int i, char *options)
 			{
 				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
 				//dirLst[0] = ft_dirnew(-1, argv[temp - 2]);
-				//printf("adresse de dirLst[0]:%p\n", dirLst[0]);
+				printf("adresse de dirLst[0]:%p\n", dirLst[0]);
 				ft_Sort(&dirLst[0]);
 				/*while (dirLst[0])
 				{
@@ -168,8 +201,8 @@ void					ft_run(int argc, char **argv, int i, char *options)
 			else
 			{
 				dirLst[1] = ft_dirnew(dirRaw->st_mode, argv[temp - 2]);
-				int i = ((dirLst[1]->mode) & (1 << 15)) > 0;
-				printf("Directory test:%d, mode value:%d,  operand name:%s\n", i, dirLst[1]->mode, dirLst[1]->name);
+				//int i = ((dirLst[1]->mode) & (1 << 14)) > 0;
+				printf(/*"Directory test:%d,*/" mode value:%d,  operand name:%s\n", /*i,*/ dirLst[1]->mode, dirLst[1]->name);
 			}
 		}
 	else
