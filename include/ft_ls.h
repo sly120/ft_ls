@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/01/21 04:23:34 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/25 11:24:59 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ typedef struct		s_dir
 
 void				ft_run(int argc, char ** argv, int i, char *options);
 void				ft_errorNonDirectoryOperand(char *s);
+void				ft_sort(t_dir **dirLst);
 #	endif
