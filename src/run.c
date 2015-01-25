@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/19 06:00:20 by sly               #+#    #+#             */
-/*   Updated: 2015/01/24 06:36:53 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/25 06:34:43 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,39 @@ static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 	while (csr)
 	{
 		tab[i] = csr;
-	printf("tab[i] name:%s\n", (tab[i])->name);
+	//printf("tab[i] name:%s\n", (tab[i])->name);
 		csr = csr->next;
 		i++;
 	}
 	return (tab);
 }
 
-void					ft_insertionSort_name(t_dir ***dirTab, int n)
+void					ft_relink_straight(t_dir ***dirTab, int n)
+{
+	int					i;
+
+	i = -1;
+	while (++i < n - 2)
+	{
+		//printf("(*dirTab[i])->name:%s, (*dirTab[i - 1])->name:%s, i:%d\n", (*dirTab)[i]->name, (*dirTab)[i + 1]->name, i);
+		(*dirTab)[i]->next = (*dirTab)[i + 1];
+	}
+	(*dirTab)[i]->next = NULL;
+	**dirTab = (*dirTab)[0];
+}
+
+void					ft_relink_reverse(t_dir ***dirTab, int n)
+{
+	while (--n > 0)
+	{
+		/*printf("(*dirTab[n])->name:%s, (*dirTab[n - 1])->name:%s, n:%d\n", ((*dirTab)[n])->name, ((*dirTab)[n - 1])->name, n);*/
+		((*dirTab)[n])->next = (*dirTab)[n - 1];
+	}
+	((*dirTab)[0])->next = NULL;
+	**dirTab = (*dirTab)[0];
+}
+
+void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
 {
 	int					i;
 	int					j;
@@ -113,21 +138,23 @@ void					ft_insertionSort_name(t_dir ***dirTab, int n)
 	i = 1;
 	while (i < n)
 	{
-		tempDir = *dirTab[i];
+	//printf("toc toc toc\n");
+		tempDir = (*dirTab)[i];
 		j = i;
-		while ((j > 0) && (ft_strcmp((*dirTab[j - 1])->name, tempDir->name)) > 0)
+		//printf("oyo\n");
+		while ((j > 0) && (ft_strcmp(((*dirTab)[j - 1])->name, tempDir->name)) > 0)
 		{
-			*dirTab[j] = *dirTab[j - 1];
+			//printf("(*dirTab[j])->name:%s, (*dirTab[j - 1])->name:%s, j:%d\n", ((*dirTab)[j])->name, ((*dirTab)[j - 1])->name, j);
+			(*dirTab)[j] = (*dirTab)[j - 1];
 			j--;
 		}
-		*dirTab[j] = tempDir;
+		(*dirTab)[j] = tempDir;
+		i++;
 	}
-		/*relink
-		i = 0;
-		while (i++ < n - 1)
-			(*dirTab[i])->next = *dirTab[i + 1];
-		(*dirTab[n])->next = NULL;
-		**dirTab = *dirTab[0];*/
+	if (!r)
+		ft_relink_straight(dirTab, n);
+	else
+		ft_relink_reverse(dirTab, n);
 }
 
 void					ft_Sort(t_dir **dirLst)
@@ -135,34 +162,42 @@ void					ft_Sort(t_dir **dirLst)
 	t_dir				*csr;
 	t_dir				**dirTab;
 	int					count;
+	int					r;
 	int					i;
 
 	count = 0;
+	r = 0;
 	csr = *dirLst;
 	while (csr)
 	{
 		count++;
 		csr = csr->next;
 	}
-	csr = *dirLst;
-	/*while (csr)
-	{
-		printf("count:%d, name:%s\n", count, csr->name);
-		csr = csr->next;
-	}*/
+		//printf("count:%d\n", count);
 	dirTab = ft_t_dirToTab(dirLst, count);
-	i = 0;
-	while (i < count)
-	{
-		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
-		i++;
-	}
-	ft_insertionSort_name(&dirTab, count);
 	/*i = 0;
 	while (i < count)
 	{
 		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
 		i++;
+	}*/
+	ft_insertionSort_name(&dirTab, count, r);
+	/*i = 0;
+	while (i < count)
+	{
+		printf("name:%s, i:%d, count:%d\n", ((dirTab)[i])->name, i, count);
+		i++;
+	}*/
+	if (!r)
+		i = 0;
+	else
+		i = count - 1;
+	*dirLst = dirTab[i];
+	/*csr = *dirLst;
+	while (csr)
+	{
+		printf("tri:%s\n", csr->name);
+		csr = csr->next;
 	}*/
 }
 
@@ -187,15 +222,14 @@ void					ft_run(int argc, char **argv, int i, char *options)
 				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
 				//dirLst[0] = ft_dirnew(-1, argv[temp - 2]);
 				printf("adresse de dirLst[0]:%p\n", dirLst[0]);
-				ft_Sort(&dirLst[0]);
 				/*while (dirLst[0])
 				{
-					//printf("coucou\n");
 					ft_putstr(ft_itoa(dirLst[0]->mode));
 					ft_putstr(" ");
-					ft_errorNonDirectoryOperand(dirLst[0]->name);
+					ft_errorNonDirectoryOperand(dirLst[0]->name);*/
+					/*printf("dirLst ordonne:%s\n", dirLst[0]->name);
 					dirLst[0] = dirLst[0]->next;
-					//free(dirLst[0]);
+					free(dirLst[0]);
 				}*/
 			}
 			else
@@ -210,6 +244,8 @@ void					ft_run(int argc, char **argv, int i, char *options)
 		ft_putendl(".");
 		ft_openTestDir(".", &dirRaw);
 	}
+	ft_Sort(&dirLst[0]);
+	free(dirLst[0]);
 	while (*options)
 		options++;
 }

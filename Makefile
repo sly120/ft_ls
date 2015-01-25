@@ -6,7 +6,7 @@
 #    By: sly <sly@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/13 21:00:43 by sly               #+#    #+#              #
-#    Updated: 2015/01/15 20:32:31 by sly              ###   ########.fr        #
+#    Updated: 2015/01/25 02:41:46 by sly              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ INC = $(addprefix -I , $(INC_PATH))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIB_NAME)
-	$(CC) $(CFLAGS) $(LIBOPTION) $(LIB_NAME) $(INC) -o $(NAME) $(LIB_NAME) $(OBJ)
+	$(CC) $(CFLAGS) $(LIBOPTION) $(LIB_NAME) $(INC) -g -o $(NAME) $(LIB_NAME) $(OBJ)
 
 $(LIB_NAME): libfclean
 	make -C libft
