@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:18:12 by sly               #+#    #+#             */
-/*   Updated: 2015/01/25 11:44:35 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/26 15:20:53 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@ static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 	return (tab);
 }
 
-void					ft_relink_straight(t_dir ***dirTab, int n)
+void					ft_relink(t_dir ***dirTab, int n, int r)
 {
 	int					i;
-    
+
+	if (!r)
+	{
 	i = -1;
 	while (++i < n - 2)
 	{
@@ -48,10 +50,9 @@ void					ft_relink_straight(t_dir ***dirTab, int n)
 	}
 	(*dirTab)[i]->next = NULL;
 	**dirTab = (*dirTab)[0];
-}
-
-void					ft_relink_reverse(t_dir ***dirTab, int n)
-{
+	}
+	else
+	{
 	while (--n > 0)
 	{
 		/*printf("(*dirTab[n])->name:%s, (*dirTab[n - 1])->name:%s, n:%d\n", ((*dirTab)[n])->name, ((*dirTab)[n - 1])->name, n);*/
@@ -59,6 +60,7 @@ void					ft_relink_reverse(t_dir ***dirTab, int n)
 	}
 	((*dirTab)[0])->next = NULL;
 	**dirTab = (*dirTab)[0];
+	}
 }
 
 void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
@@ -83,10 +85,7 @@ void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
 		(*dirTab)[j] = tempDir;
 		i++;
 	}
-	if (!r)
-		ft_relink_straight(dirTab, n);
-	else
-		ft_relink_reverse(dirTab, n);
+		ft_relink(dirTab, n, r);
 }
 
 void					ft_sort(t_dir **dirLst)
@@ -98,7 +97,7 @@ void					ft_sort(t_dir **dirLst)
 	int					i;
     
 	count = 0;
-	r = 1;
+	r = 0;
 	csr = *dirLst;
 	while (csr)
 	{
