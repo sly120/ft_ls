@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/01/25 12:29:12 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/26 18:34:28 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <ft_ls.h>
 #include <dirent.h>
 #include <sys/stat.h>
-
+#include <sys/errno.h>
 #include <stdio.h>
 
 /*static int				ft_openTestDir(char *path, struct stat **buf)
@@ -86,10 +86,10 @@ void					ft_run(int argc, char **argv, int i, char *options)
 {
 	/*
 	 *	dirLst[0]: list of operands which are not a file nor a directory
-	 *	dirLst[1]: list of files
+	 *	dirLst[1]: list of files and directories
 	 *	dirLst[2]: list of directories
 	 */
-	t_dir			*dirLst[3];
+	t_dir				*dirLst[3];
 	int					temp;
 	//struct stat			*dirRaw;
 
@@ -103,7 +103,13 @@ void					ft_run(int argc, char **argv, int i, char *options)
 			//if (ft_openTestDir(argv[temp++ - 1], &dirRaw) == -1)
 			if (ft_openDir(argv[temp++ - 1]))
 			{
-				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
+				if (errno == 2)
+					ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
+				else
+				{
+					ft_dirAdd(&dirLst[1], ft_dirnew(-1, argv[temp - 2]));
+					ft_dirAdd(&dirLst[2], ft_dirnew(-1, argv[temp - 2]));
+				}
 				//dirLst[0] = ft_dirnew(-1, argv[temp - 2]);
 				//printf("adresse de dirLst[0]:%p\n", dirLst[0]);
 				/*while (dirLst[0])
