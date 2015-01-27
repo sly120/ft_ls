@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/01/26 18:34:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/01/27 21:31:51 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,13 @@ void					ft_run(int argc, char **argv, int i, char *options)
 		while (argc >= temp)
 		{
 			//if (ft_openTestDir(argv[temp++ - 1], &dirRaw) == -1)
-			if (ft_openDir(argv[temp++ - 1]))
+			if (ft_openDir(argv[temp++ - 1]) == -1)
 			{
 				if (errno == 2)
 					ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp - 2]));
 				else
 				{
+					printf("ok\n");
 					ft_dirAdd(&dirLst[1], ft_dirnew(-1, argv[temp - 2]));
 					ft_dirAdd(&dirLst[2], ft_dirnew(-1, argv[temp - 2]));
 				}
