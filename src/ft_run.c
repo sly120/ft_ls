@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/01/29 22:07:51 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/02 16:56:08 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void					ft_run(int argc, char **argv, int i, char *options)
 	t_dir				*dirLst[2];
 	int					temp[3];
 	struct stat			*dirRaw;
+	t_dir				*check;
 
 	temp[0] = 0;
 	temp[1] = 0;
@@ -102,7 +103,7 @@ void					ft_run(int argc, char **argv, int i, char *options)
 		dirLst[(temp[0])++] = NULL;
 	temp[0] = i;
 	if (argc >= temp[0])
-		while (argc >= (temp[0])++)
+		while (argc >= temp[0])
 		{
 			if (ft_getStat(argv[temp[0] - 2], &dirRaw) == -1)
 			{
@@ -118,6 +119,7 @@ void					ft_run(int argc, char **argv, int i, char *options)
 				printf("Directory test:%d, mode value:%d, operand name:%s\n", temp[0] - 2, dirLst[1]->mode, dirLst[1]->name);
 				temp[2] = 1;
 			}
+			temp[0]++;
 				//printf("Directory test:%d, mode value:%d,  operand name:%s\n", temp[0] - 2, dirLst[1]->next->mode, dirLst[1]->next->name);
 		}
 	else
@@ -127,6 +129,12 @@ void					ft_run(int argc, char **argv, int i, char *options)
 	}
 	if (temp[1] == 1)
 	{
+		check = dirLst[0];
+		while (check)
+		{
+			printf("check: %s\n", check->name);
+			check = check->next;
+		}
 		ft_sort(&dirLst[0]);
 		free(dirLst[0]);
 	}
