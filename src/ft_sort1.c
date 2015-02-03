@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:18:12 by sly               #+#    #+#             */
-/*   Updated: 2015/01/26 15:20:53 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/03 19:10:57 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void					ft_relink(t_dir ***dirTab, int n, int r)
 	if (!r)
 	{
 	i = -1;
-	while (++i < n - 2)
+	while (++i < n - 1)
 	{
 		//printf("(*dirTab[i])->name:%s, (*dirTab[i - 1])->name:%s, i:%d\n", (*dirTab)[i]->name, (*dirTab)[i + 1]->name, i);
 		(*dirTab)[i]->next = (*dirTab)[i + 1];
@@ -104,7 +104,13 @@ void					ft_sort(t_dir **dirLst)
 		count++;
 		csr = csr->next;
 	}
-    //printf("count:%d\n", count);
+	/*csr = *dirLst;
+	while (csr)
+	{
+		printf("name:%s\n", csr->name);
+		csr = csr->next;
+	}
+    printf("count:%d\n", count);*/
 	dirTab = ft_t_dirToTab(dirLst, count);
 	/*i = 0;
      while (i < count)

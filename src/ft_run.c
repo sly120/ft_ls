@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/02 16:56:08 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/03 19:23:12 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void					ft_run(int argc, char **argv, int i, char *options)
 	t_dir				*dirLst[2];
 	int					temp[3];
 	struct stat			*dirRaw;
-	t_dir				*check;
+	//t_dir				*check;
 
 	temp[0] = 0;
 	temp[1] = 0;
@@ -107,16 +107,16 @@ void					ft_run(int argc, char **argv, int i, char *options)
 		{
 			if (ft_getStat(argv[temp[0] - 2], &dirRaw) == -1)
 			{
-				printf("fail to open:%s, errno:%d\n", argv[temp[0] - 2], errno);
+				printf("fail to open:%s, errno:%d, temp[0]:%d, i:%d\n", argv[temp[0] - 2], errno, temp[0], i);
 				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp[0] - 2]));
 				temp[1] = 1;
 			}
 			else
 			{
-				printf("argv:%s\n", argv[temp[0] - 2]);
+				//printf("argv:%s\n", argv[temp[0] - 2]);
 				ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[temp[0] - 2]));
 				//int i = ((dirLst[1]->mode) & (1 << 14)) > 0;
-				printf("Directory test:%d, mode value:%d, operand name:%s\n", temp[0] - 2, dirLst[1]->mode, dirLst[1]->name);
+				printf("Directory test:%d, mode value:%d, operand name:%s, temp[0]:%d, i:%d\n", temp[0] - 2, dirLst[1]->mode, dirLst[1]->name, temp[0], i);
 				temp[2] = 1;
 			}
 			temp[0]++;
@@ -129,12 +129,12 @@ void					ft_run(int argc, char **argv, int i, char *options)
 	}
 	if (temp[1] == 1)
 	{
-		check = dirLst[0];
+		/*check = dirLst[0];
 		while (check)
 		{
 			printf("check: %s\n", check->name);
 			check = check->next;
-		}
+		}*/
 		ft_sort(&dirLst[0]);
 		free(dirLst[0]);
 	}
