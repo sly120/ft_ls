@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:18:12 by sly               #+#    #+#             */
-/*   Updated: 2015/02/03 19:10:57 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/04 21:02:55 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void					ft_sort(t_dir **dirLst)
 	csr = *dirLst;
      while (csr)
      {
-     printf("tri:%s\n", csr->name);
+     //printf("tri:%s\n", csr->name);
      csr = csr->next;
      }
 }
