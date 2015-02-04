@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/03 19:23:12 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/04 16:29:49 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,20 +103,20 @@ void					ft_run(int argc, char **argv, int i, char *options)
 		dirLst[(temp[0])++] = NULL;
 	temp[0] = i;
 	if (argc >= temp[0])
-		while (argc >= temp[0])
+		while (temp[0] <= argc)
 		{
-			if (ft_getStat(argv[temp[0] - 2], &dirRaw) == -1)
+			if (ft_getStat(argv[temp[0] - 1], &dirRaw) == -1)
 			{
-				printf("fail to open:%s, errno:%d, temp[0]:%d, i:%d\n", argv[temp[0] - 2], errno, temp[0], i);
-				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp[0] - 2]));
+				printf("fail to open:%s, errno:%d, temp[0]:%d, i:%d\n", argv[temp[0] - 1], errno, temp[0], i);
+				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp[0] - 1]));
 				temp[1] = 1;
 			}
 			else
 			{
 				//printf("argv:%s\n", argv[temp[0] - 2]);
-				ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[temp[0] - 2]));
+				ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[temp[0] - 1]));
 				//int i = ((dirLst[1]->mode) & (1 << 14)) > 0;
-				printf("Directory test:%d, mode value:%d, operand name:%s, temp[0]:%d, i:%d\n", temp[0] - 2, dirLst[1]->mode, dirLst[1]->name, temp[0], i);
+				printf("Directory test:%d, mode value:%d, operand name:%s, temp[0]:%d, i:%d\n", temp[0] - 1, dirLst[1]->mode, dirLst[1]->name, temp[0], i);
 				temp[2] = 1;
 			}
 			temp[0]++;
