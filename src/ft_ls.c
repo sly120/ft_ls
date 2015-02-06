@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/01/25 01:43:54 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/06 21:06:22 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int		ft_isOption(char c, char **options)
 				return (-1);
 			return (1);
 		}
-	free(ref);
+	//free(ref);
 	return (0);
 }
 
@@ -108,18 +108,17 @@ static int		ft_readArg(int argc, char **argv, char **options)
 	return (i);
 }
 
-static void		ft_initOptions(char **options)
-{
-	*options = (char*)malloc(sizeof(char) * (OPTION_NB + 1));
-	bzero(*options, OPTION_NB);
-}
-
 int				main(int argc, char **argv)
 {
 	char		*options;
+	int			ret;
 
-	ft_initOptions(&options);
-	ft_run(argc, argv, ft_readArg(argc, argv, &options), options);
+	if (!(options = (char*)malloc(sizeof(char) * (OPTION_NB + 1))))
+		return (-1);
+	ft_bzero(options, OPTION_NB);
+	ret = ft_run(argc, argv, ft_readArg(argc, argv, &options), options);
+	if (ret == -1)
+		return (-1);
 	free(options);
 	return (0);
 }

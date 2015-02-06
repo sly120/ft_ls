@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/04 21:20:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/06 21:33:48 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,19 @@ void				ft_openDirectory(t_dir **dirLst)
 	csr = *dirLst;
 	while (csr)
 	{
-		if (!(dstream = opendir(csr->name)))
+		if ((dstream = opendir(csr->name)))
 		{
-			printf("errno:%d", errno);
+			while ((dirent = readdir(dstream)) != NULL)
+			{
+				ft_putendl(dirent->d_name);
+			}
+			(void)closedir(dstream);
+		}
+		else
+		{
+			printf("errno:%d\n", errno);
 			perror(csr->name);
-			csr = csr->next;
 		}
-		while ((dirent = readdir(dstream)) != NULL)
-		{
-			ft_putendl(dirent->d_name);
-		}
-		(void)closedir(dstream);
 		csr = csr->next;
 	}
 }

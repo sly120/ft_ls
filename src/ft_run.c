@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/04 21:22:24 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/06 21:27:01 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static t_dir			*ft_dirnew(int d_mode, char *d_name)
 	return (tmp);
 }
 
-void					ft_run(int argc, char **argv, int i, char *options)
+int						ft_run(int argc, char **argv, int i, char *options)
 {
 	/*
 	 *	dirLst[0]: list of operands which are not a file nor a directory
@@ -79,6 +79,8 @@ void					ft_run(int argc, char **argv, int i, char *options)
 	struct stat			*dirRaw;
 	t_dir				*check;
 
+	if (i == -1)
+		return (-1);
 	temp[0] = 0;
 	temp[1] = 0;
 	temp[2] = 0;
@@ -140,19 +142,19 @@ void					ft_run(int argc, char **argv, int i, char *options)
 			perror(check->name);
 			check = check->next;
 		}
-		//free(dirLst[0]);
+		free(dirLst[0]);
 	}
 	if (temp[2] == 1)
 	{
 		ft_sort(&dirLst[1]);
-		//free(dirLst[1]);
+		free(dirLst[1]);
 	}
 	if (temp[3] == 1)
 	{
 		ft_sort(&dirLst[2]);
 		ft_openDirectory(&dirLst[2]);
-		//free(dirLst[2]);
+		free(dirLst[2]);
 	}
-	while (*options)
-		options++;
+	(void)options;
+	return (0);
 }
