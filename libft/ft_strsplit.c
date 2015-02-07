@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 23:08:12 by sly               #+#    #+#             */
-/*   Updated: 2015/01/17 05:30:05 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/07 19:35:26 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static size_t			ft_subslen(char const *s, char c)
 	register char		*str;
 
 	str = (char*)s;
-	while (*str != c || !*str)
+	while (*str != c && *str != '\0')
 		str++;
 	return ((size_t)(str - s));
 }
@@ -72,7 +72,7 @@ char					**ft_strsplit(char const *s, char c)
 		return (stab);
 	}
 	subs = ft_switchcount(s, c);
-	if (!(stab = (char**)malloc(((subs + 1) * sizeof(char*)))))
+	if (!(stab = (char**)malloc((subs + 1) * sizeof(char*))))
 		return (NULL);
 	i = 0;
 	str = (char*)s;
