@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/06 21:27:01 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/07 21:35:13 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,53 +69,53 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	 *	dirLst[0]: list of operands which are not a file nor a directory
 	 *	dirLst[1]: list of files
 	 *	dirLst[1]: list of directories
-	 *	temp[0]: count
-	 *	temp[1]: isdirLst[0] indicator
-	 *	temp[2]: isdirLst[1] indicator
-	 *	temp[3]: isdirLst[2] indicator
+	 *	tab[0]: count
+	 *	tab[1]: isdirLst[0] indicator
+	 *	tab[2]: isdirLst[1] indicator
+	 *	tab[3]: isdirLst[2] indicator
 	 */
 	t_dir				*dirLst[3];
-	int					temp[4];
+	int					tab[4];
 	struct stat			*dirRaw;
 	t_dir				*check;
 
 	if (i == -1)
 		return (-1);
-	temp[0] = 0;
-	temp[1] = 0;
-	temp[2] = 0;
-	temp[3] = 0;
-	while (temp[0] < 3)
-		dirLst[(temp[0])++] = NULL;
-	temp[0] = i;
-	if (argc >= temp[0])
-		while (temp[0] <= argc)
+	tab[0] = 0;
+	tab[1] = 0;
+	tab[2] = 0;
+	tab[3] = 0;
+	while (tab[0] < 3)
+		dirLst[(tab[0])++] = NULL;
+	tab[0] = i;
+	if (argc >= tab[0])
+		while (tab[0] <= argc)
 		{
-			if (ft_getStat(argv[temp[0] - 1], &dirRaw) == -1)
+			if (ft_getStat(argv[tab[0] - 1], &dirRaw) == -1)
 			{
-				//printf("fail to open:%s, errno:%d, temp[0]:%d, i:%d\n", argv[temp[0] - 1], errno, temp[0], i);
-				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[temp[0] - 1]));
-				temp[1] = 1;
+				//printf("fail to open:%s, errno:%d, tab[0]:%d, i:%d\n", argv[tab[0] - 1], errno, tab[0], i);
+				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[tab[0] - 1]));
+				tab[1] = 1;
 			}
 			else
 			{
-				//printf("argv:%s\n", argv[temp[0] - 2]);
+				//printf("argv:%s\n", argv[tab[0] - 2]);
 				if (dirRaw->st_mode == S_IFDIR || dirRaw->st_mode == 16877)
 				{
-					ft_dirAdd(&dirLst[2], ft_dirnew(dirRaw->st_mode, argv[temp[0] - 1]));
-				temp[3] = 1;
-				//printf("Directory test:%d, mode value:%d, dirRaw->mode:%d, operand name:%s, temp[0]:%d, i:%d, ifdir:%d\n", temp[0] - 1, dirLst[2]->mode, dirRaw->st_mode, dirLst[2]->name, temp[0], i, S_IFDIR);
+					ft_dirAdd(&dirLst[2], ft_dirnew(dirRaw->st_mode, argv[tab[0] - 1]));
+				tab[3] = 1;
+				//printf("Directory test:%d, mode value:%d, dirRaw->mode:%d, operand name:%s, tab[0]:%d, i:%d, ifdir:%d\n", tab[0] - 1, dirLst[2]->mode, dirRaw->st_mode, dirLst[2]->name, tab[0], i, S_IFDIR);
 				}
 				else
 				{
-					ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[temp[0] - 1]));
-				temp[2] = 1;
-				//printf("second Directory test:%d, mode value:%d, operand name:%s, temp[0]:%d, i:%d, ifdir:%d\n", temp[0] - 1, dirLst[1]->mode, dirLst[1]->name, temp[0], i, S_IFDIR);
+					ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[tab[0] - 1]));
+				tab[2] = 1;
+				//printf("second Directory test:%d, mode value:%d, operand name:%s, tab[0]:%d, i:%d, ifdir:%d\n", tab[0] - 1, dirLst[1]->mode, dirLst[1]->name, tab[0], i, S_IFDIR);
 				}
 				//int i = ((dirLst[1]->mode) & (1 << 14)) > 0;
 			}
-			temp[0]++;
-				//printf("Directory test:%d, mode value:%d,  operand name:%s\n", temp[0] - 2, dirLst[1]->next->mode, dirLst[1]->next->name);
+			tab[0]++;
+				//printf("Directory test:%d, mode value:%d,  operand name:%s\n", tab[0] - 2, dirLst[1]->next->mode, dirLst[1]->next->name);
 		}
 	else
 	{
@@ -123,9 +123,9 @@ int						ft_run(int argc, char **argv, int i, char *options)
 		ft_getStat(".", &dirRaw);
 		ft_dirAdd(&dirLst[2], ft_dirnew(dirRaw->st_mode, "."));
 		//printf(".->mode:%d\n", dirLst[1]->mode);
-		temp[3] = 1;
+		tab[3] = 1;
 	}
-	if (temp[1] == 1)
+	if (tab[1] == 1)
 	{
 		/*check = dirLst[0];
 		while (check)
@@ -144,15 +144,15 @@ int						ft_run(int argc, char **argv, int i, char *options)
 		}
 		free(dirLst[0]);
 	}
-	if (temp[2] == 1)
+	if (tab[2] == 1)
 	{
 		ft_sort(&dirLst[1]);
 		free(dirLst[1]);
 	}
-	if (temp[3] == 1)
+	if (tab[3] == 1)
 	{
 		ft_sort(&dirLst[2]);
-		ft_openDirectory(&dirLst[2]);
+		ft_openDirectory(&dirLst[2], NULL);
 		free(dirLst[2]);
 	}
 	(void)options;
