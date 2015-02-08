@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:18:12 by sly               #+#    #+#             */
-/*   Updated: 2015/02/04 21:02:55 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/08 16:44:12 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_dir			**ft_t_dirToTab(t_dir **dirLst, int n)
 	return (tab);
 }
 
-void					ft_relink(t_dir ***dirTab, int n, int r)
+static void					ft_relink(t_dir ***dirTab, int n, int r)
 {
 	int					i;
 
@@ -63,7 +63,7 @@ void					ft_relink(t_dir ***dirTab, int n, int r)
 	}
 }
 
-void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
+static void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
 {
 	int					i;
 	int					j;
@@ -88,7 +88,7 @@ void					ft_insertionSort_name(t_dir ***dirTab, int n, int r)
 		ft_relink(dirTab, n, r);
 }
 
-void					ft_sort(t_dir **dirLst)
+void					ft_sort_dir(t_dir **dirLst)
 {
 	t_dir				*csr;
 	t_dir				**dirTab;

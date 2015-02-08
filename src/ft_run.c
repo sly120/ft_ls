@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/07 21:35:13 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/08 18:02:13 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int						ft_run(int argc, char **argv, int i, char *options)
 			printf("check: %s\n", check->name);
 			check = check->next;
 		}*/
-		ft_sort(&dirLst[0]);
+		ft_sort_dir(&dirLst[0]);
 		check = dirLst[0];
 		while (check)
 		{
@@ -146,15 +146,14 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	}
 	if (tab[2] == 1)
 	{
-		ft_sort(&dirLst[1]);
+		ft_sort_dir(&dirLst[1]);
 		free(dirLst[1]);
 	}
 	if (tab[3] == 1)
 	{
-		ft_sort(&dirLst[2]);
-		ft_openDirectory(&dirLst[2], NULL);
+		ft_sort_dir(&dirLst[2]);
+		ft_openDirecto(&dirLst[2], options, NULL);
 		free(dirLst[2]);
 	}
-	(void)options;
 	return (0);
 }

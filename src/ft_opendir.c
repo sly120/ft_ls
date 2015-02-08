@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/07 21:19:01 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/08 20:46:44 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@
 
 #include <stdio.h>
 
-static void			ft_entAdd(t_ent **entries, t_ent *newEnt)
+static void			ft_entAdd(t_ent **entLst, t_ent *newEnt)
 {
 	t_ent			*csr;
 
-	if (!entries || !newEnt)
+	if (!entLst || !newEnt)
 		return ;
-	if (!*entries)
-		*entries = newEnt;
+	if (!*entLst)
+		*entLst = newEnt;
 	else
 	{
-		csr = *entries;
+		csr = *entLst;
 		while (csr->next)
 			csr = csr->next;
 		csr->next = newEnt;
@@ -61,18 +61,24 @@ static int			ft_split(char ***split, char *src)
 	return (i - 1);
 }
 
-void				ft_openDirectory(t_dir **dirLst, char **split)
+void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 {
+	/*
+	 * tab[0]: is entLst indicator
+	 * tab[1]: is option a indicator
+	 * tab[2]: intermediate variable for last split element
+	 */
+	int				tab[3];
 	t_dir			*csr;
 	DIR				*dstream;
 	struct dirent	*dirent;
-	t_ent			*entries;
-	int				tab[2];
-	//t_ent			*ent;
+	t_ent			*entLst;
+	t_ent			*ent;
 
 	csr = *dirLst;
 	tab[0] = 0;
-	entries = NULL;
+	tab[1] = 0;
+	entLst = NULL;
 	while (csr)
 	{
 		if ((dstream = opendir(csr->name)))
@@ -80,22 +86,26 @@ void				ft_openDirectory(t_dir **dirLst, char **split)
 			while ((dirent = readdir(dstream)) != NULL)
 			{
 				//ft_putendl(dirent->d_name);
-				ft_entAdd(&entries, ft_entNew(dirent->d_name));
+				ft_entAdd(&entLst, ft_entNew(dirent->d_name));
 				tab[0] = 1;
 			}
-			/*ent = entries;
+			ft_sort_ent(&entLst);
+			ent = entLst;
+			tab[1] = ft_option_check(options, 'a');
+			//printf("options:%d\n", tab[1]);
 			while (ent)
 			{
-				printf("entries:%s\n", ent->name);
+				if (tab[1] || (ent->name)[0] != '.')
+					ft_putendl(ent->name);
 				ent = ent->next;
-			}*/
+			}
 			(void)closedir(dstream);
 		}
 		else
 		{
 			split = NULL;
-			tab[1] = ft_split(&split, csr->name);
-			ft_error_prefix(split[tab[1]]);
+			tab[2] = ft_split(&split, csr->name);
+			ft_error_prefix(split[tab[2]]);
 			free(split);
 		}
 		csr = csr->next;
