@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/08 20:46:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/09 21:23:46 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 	t_dir			*csr;
 	DIR				*dstream;
 	struct dirent	*dirent;
-	t_ent			*entLst;
-	t_ent			*ent;
+	t_ent			*entLst[2];
 
 	csr = *dirLst;
 	tab[0] = 0;
 	tab[1] = 0;
-	entLst = NULL;
+	entLst[0] = NULL;
+	entLst[1] = NULL;
 	while (csr)
 	{
 		if ((dstream = opendir(csr->name)))
@@ -86,18 +86,18 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 			while ((dirent = readdir(dstream)) != NULL)
 			{
 				//ft_putendl(dirent->d_name);
-				ft_entAdd(&entLst, ft_entNew(dirent->d_name));
+				ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
 				tab[0] = 1;
 			}
-			ft_sort_ent(&entLst);
-			ent = entLst;
+			ft_sort_ent(&entLst[0]);
+			entLst[1] = entLst[0];
 			tab[1] = ft_option_check(options, 'a');
 			//printf("options:%d\n", tab[1]);
-			while (ent)
+			while (entLst[1])
 			{
-				if (tab[1] || (ent->name)[0] != '.')
-					ft_putendl(ent->name);
-				ent = ent->next;
+				if (tab[1] || (entLst[1]->name)[0] != '.')
+					ft_putendl(entLst[1]->name);
+				entLst[1] = entLst[1]->next;
 			}
 			(void)closedir(dstream);
 		}
@@ -110,4 +110,6 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 		}
 		csr = csr->next;
 	}
+	/*if (ft_option_check(options, 'R'))
+		ft_recursive_ls();*/
 }
