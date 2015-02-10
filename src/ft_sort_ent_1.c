@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/08 16:41:21 by sly               #+#    #+#             */
-/*   Updated: 2015/02/08 16:57:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/10 21:13:52 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 
-static t_ent			**ft_t_entToTab(t_ent **entLst, int n)
+t_ent			**ft_t_entToTab(t_ent **entLst, int n)
 {
 	t_ent				**tab;
 	t_ent				*csr;

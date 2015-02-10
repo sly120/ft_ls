@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/09 21:23:46 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/10 21:46:28 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 			ft_error_prefix(split[tab[2]]);
 			free(split);
 		}
+		if (ft_option_check(options, 'R'))
+			ft_recursive_ls(entLst[0], options);
 		csr = csr->next;
 	}
-	/*if (ft_option_check(options, 'R'))
-		ft_recursive_ls();*/
 }

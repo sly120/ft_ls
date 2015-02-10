@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/09 19:48:38 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/10 21:03:59 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ void				ft_sort_dir(t_dir **dirLst);
 void				ft_sort_ent(t_ent **entLst);
 void				ft_openDirecto(t_dir **dirLst, char* options, char **split);
 int					ft_option_check(char *options, char c);
+void				ft_recursive_ls(t_ent *entLst, char *options);
 void				ft_error_prefix(char *s);
 #	endif
