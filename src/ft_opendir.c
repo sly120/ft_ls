@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/10 21:46:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/11 20:46:07 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,21 @@
 #include <dirent.h>
 
 #include <stdio.h>
+
+static void			ft_free_t_ent(t_ent *entLst)
+{
+	t_ent			*csr;
+
+	if (!entLst)
+		return ;
+	while (entLst)
+	{
+		csr = entLst;
+		entLst = entLst->next;
+		free(csr->name);
+		free(csr);
+	}
+}
 
 static void			ft_entAdd(t_ent **entLst, t_ent *newEnt)
 {
@@ -77,12 +92,12 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 	csr = *dirLst;
 	tab[0] = 0;
 	tab[1] = 0;
-	entLst[0] = NULL;
-	entLst[1] = NULL;
 	while (csr)
 	{
+		//printf("csr:%s\n", csr->name);
 		if ((dstream = opendir(csr->name)))
 		{
+			entLst[0] = NULL;
 			while ((dirent = readdir(dstream)) != NULL)
 			{
 				//ft_putendl(dirent->d_name);
@@ -99,6 +114,8 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 					ft_putendl(entLst[1]->name);
 				entLst[1] = entLst[1]->next;
 			}
+			ft_free_t_ent(entLst[0]);
+			//printf("\nok\n");
 			(void)closedir(dstream);
 		}
 		else
@@ -110,6 +127,6 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 		}
 		if (ft_option_check(options, 'R'))
 			ft_recursive_ls(entLst[0], options);
-		csr = csr->next;
+		//csr = csr->next;
 	}
 }

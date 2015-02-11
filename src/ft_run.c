@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/09 19:48:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/11 21:21:39 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ static t_dir			*ft_dirnew(int d_mode, char *d_name)
 	tmp->mode = d_mode;
 	tmp->next = NULL;
 	return (tmp);
+}
+
+void					ft_discriminate_dir(t_dir **dirLst[3], struct stat *raw,
+											int i, char **argv)
+{
 }
 
 int						ft_run(int argc, char **argv, int i, char *options)
