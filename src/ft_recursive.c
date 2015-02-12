@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/02/10 21:46:26 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/12 20:24:08 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,21 @@ static char			**ft_t_entToCharTab(t_ent *entLst, int n)
 	t_ent			*csr;
 	int				i;
 
-	if (!(tab = (char**)malloc(sizeof(char*) * (n - 1))))
+	if (!(tab = (char**)malloc(sizeof(char*) * (n + 1))))
 		return (NULL);
 	csr = entLst;
 	i = 0;
-	while (csr && i < n - 1)
+	while (csr)
 	{
-		if (ft_strcmp(csr->name, ".") == 0 || ft_strcmp(csr->name, "..") == 0)
-			csr = csr->next;
-		tab[i++] = ft_strdup(csr->name);
+		if (csr->type == DT_DIR)
+		{
+			//printf("csr before:%s\n", csr->name);
+			if ((ft_strcmp(csr->name, ".")) && (ft_strcmp(csr->name, "..")))
+			{
+				tab[i++] = ft_strdup(csr->name);
+				//printf("csr name:%s, tab i:%s\n", csr->name, tab[i - 1]);
+			}
+		}
 		csr = csr->next;
 	}
 	tab[i] = NULL;
@@ -46,10 +52,17 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 	char			**tab;
 
 	count = 0;
+	/*csr = entLst;
+	while (csr)
+	{
+		printf("csr:%s, type:%u\n", csr->name, csr->type);
+		csr = csr->next;
+	}*/
 	csr = entLst;
 	while (csr)
 	{
-		count++;
+		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
+			count++;
 		csr = csr->next;
 	}
 	//printf("options:%s, count:%d\n", options, count);
@@ -58,11 +71,12 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 		tab = ft_t_entToCharTab(entLst, count);
 		if (!tab)
 			return ;
-		count = 0;
+		/*count = 0;
 		while (tab[count])
 		{
-			printf("tab:%s\n", tab[count++]);
-		}
+			printf("tab:%s\n", tab[count++]);//, ft_strcmp(entLst->name, "."));
+		}*/
+		ft_run(count, tab, 1, options);
 		(void)options;
 	}
 }

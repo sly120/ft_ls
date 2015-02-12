@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/10 21:03:59 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/12 18:10:52 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct		s_dir
 typedef struct		s_ent
 {
 	char			*name;
+	unsigned char	type;
 	struct s_ent	*next;
 }					t_ent;
 
