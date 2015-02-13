@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/02/12 20:24:08 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/13 22:12:37 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 		{
 			printf("tab:%s\n", tab[count++]);//, ft_strcmp(entLst->name, "."));
 		}*/
+		//afficher le path de chaque dossier avant d'effectuer le ls
 		ft_run(count, tab, 1, options);
-		(void)options;
 	}
 }
