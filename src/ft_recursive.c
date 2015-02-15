@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/02/13 22:12:37 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/15 18:37:06 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,40 +18,41 @@
 
 #include <stdio.h>
 
-static char			**ft_t_entToCharTab(t_ent *entLst, int n)
+/*static void			ft_free_tabchar(char **tab, int size)
 {
-	char			**tab;
-	t_ent			*csr;
 	int				i;
 
-	if (!(tab = (char**)malloc(sizeof(char*) * (n + 1))))
-		return (NULL);
-	csr = entLst;
 	i = 0;
-	while (csr)
+	if (!tab)
+		return ;
+	while (i < size)
+		free(tab[i]);
+}*/
+
+static char			**ft_t_entToCharTab(t_ent *entLst)
+{
+	char			**tab;
+
+	if (!(tab = (char**)malloc(sizeof(char*) * 2)))
+		return (NULL);
+	if (entLst->type == DT_DIR)
 	{
-		if (csr->type == DT_DIR)
+		//printf("csr before:%s\n", csr->name);
+		if ((ft_strcmp(entLst->name, ".")) && (ft_strcmp(entLst->name, "..")))
 		{
-			//printf("csr before:%s\n", csr->name);
-			if ((ft_strcmp(csr->name, ".")) && (ft_strcmp(csr->name, "..")))
-			{
-				tab[i++] = ft_strdup(csr->name);
-				//printf("csr name:%s, tab i:%s\n", csr->name, tab[i - 1]);
-			}
+			tab[0] = ft_strdup(entLst->name);
+			//printf("csr name:%s, tab i:%s\n", csr->name, tab[i - 1]);
 		}
-		csr = csr->next;
 	}
-	tab[i] = NULL;
+	tab[1] = NULL;
 	return (tab);
 }
 
 void				ft_recursive_ls(t_ent *entLst, char *options)
 {
 	t_ent			*csr;
-	int				count;
 	char			**tab;
 
-	count = 0;
 	/*csr = entLst;
 	while (csr)
 	{
@@ -62,21 +63,16 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 	while (csr)
 	{
 		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
-			count++;
+		{
+			if (!(tab = ft_t_entToCharTab(csr)))
+				return ;
+			ft_putchar('\n');
+			ft_putstr(tab[0]);
+			ft_putendl(":");
+			ft_run(1, tab, 1, options);
+			//ft_free_tabchar(tab, 1);
+		}
 		csr = csr->next;
 	}
 	//printf("options:%s, count:%d\n", options, count);
-	if (count > 0)
-	{
-		tab = ft_t_entToCharTab(entLst, count);
-		if (!tab)
-			return ;
-		/*count = 0;
-		while (tab[count])
-		{
-			printf("tab:%s\n", tab[count++]);//, ft_strcmp(entLst->name, "."));
-		}*/
-		//afficher le path de chaque dossier avant d'effectuer le ls
-		ft_run(count, tab, 1, options);
-	}
 }
