@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/12 16:52:40 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/17 20:53:00 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,56 @@ static t_dir			*ft_dirnew(int d_mode, char *d_name)
 	return (tmp);
 }
 
+static void				ft_init_inttab(int **inttab, int n)
+{
+	int					i;
+
+	i = 0;
+	while (i < n)
+		(*inttab)[i] = 0;
+}
+
+static void				ft_init_entLst(t_ent **entLst, int n)
+{
+	int					i;
+
+	i = 0;
+	while (i < n)
+		*entLst[i] = NULL;
+}
+
 int						ft_run(int argc, char **argv, int i, char *options)
 {
 	/*
 	 *	dirLst[0]: list of operands which are not a file nor a directory
 	 *	dirLst[1]: list of files
-	 *	dirLst[1]: list of directories
+	 *	dirLst[2]: list of directories
+	 *	inttab[0]: count
+	 *	inttab[1]: isdirLst[0] indicator
+	 *	inttab[2]: isdirLst[1] indicator
+	 *	inttab[3]: isdirLst[2] indicator
+	 */
+	t_ent				**entLst;
+	int					**inttab;
+
+	if (i == -1)
+		return (-1);
+	ft_init_inttab(inttab, 4);
+	ft_init_entLst(entLst, 3);
+}
+
+/*int						ft_run(int argc, char **argv, int i, char *options)
+{
+	
+	 *	dirLst[0]: list of operands which are not a file nor a directory
+	 *	dirLst[1]: list of files
+	 *	dirLst[2]: list of directories
 	 *	tab[0]: count
 	 *	tab[1]: isdirLst[0] indicator
 	 *	tab[2]: isdirLst[1] indicator
 	 *	tab[3]: isdirLst[2] indicator
 	 */
-	t_dir				*dirLst[3];
+	/*t_dir				*dirLst[3];
 	int					tab[4];
 	struct stat			*dirRaw;
 	t_dir				*check;
@@ -127,13 +165,13 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	}
 	if (tab[1] == 1)
 	{
-		/*check = dirLst[0];
+		check = dirLst[0];
 		while (check)
 		{
 			printf("check: %s\n", check->name);
 			check = check->next;
 		}*/
-		ft_sort_dir(&dirLst[0]);
+		/*ft_sort_dir(&dirLst[0]);
 		check = dirLst[0];
 		while (check)
 		{
