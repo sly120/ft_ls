@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/17 20:53:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/19 22:56:54 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,82 +23,107 @@ static int				ft_getStat(char *path, struct stat **buf)
 	int					ret;
 
 	*buf = (struct stat*)malloc(sizeof(struct stat));
-	if ((ret = stat(path, *buf) == -1))
-		return (-1);
-	//printf("mode of %s:%d\n", path, (*buf)->st_mode);
-	return (0);
+	return ((ret = stat(path, *buf)));
 }
 
-static void				ft_dirAdd(t_dir **dirLst, t_dir *newDir)
+static void				ft_entAdd(t_ent **entLst, t_ent *new)
 {
-	t_dir				*csr;
+	t_ent				*csr;
 
-	if (!dirLst || !newDir)
+	if (!entLst || !new)
 		return ;
-	if (!*dirLst)
-		*dirLst = newDir;
+	if (!*entLst)
+		*entLst = new;
 	else
 	{
-		csr = *dirLst;
+		csr = *entLst;
 		while (csr->next)
 			csr = csr->next;
-		csr->next = newDir;
+		csr->next = new;
 	}
 }
 
-static t_dir			*ft_dirnew(int d_mode, char *d_name)
+static t_ent			*ft_entFactory(char *name)
 {
-	t_dir				*tmp;
-	size_t				len;
+	t_ent				*tmp;
 
-	if (!(tmp = (t_dir*)malloc(sizeof(t_dir))))
+	if (!(tmp = (t_ent*)malloc(sizeof(t_ent))))
 		return (NULL);
-	len = ft_strlen(d_name);
-	if (!(tmp->name = (char*)malloc(sizeof(char) * (len + 1))))
-		return (NULL);
-	ft_memcpy(tmp->name, d_name, len);
-	(tmp->name)[len] = '\0';
-	tmp->mode = d_mode;
+	tmp->name = ft_strdup(name);
+	tmp->stat = NULL;
+	tmp->path = NULL;
 	tmp->next = NULL;
 	return (tmp);
 }
 
 static void				ft_init_inttab(int **inttab, int n)
 {
-	int					i;
+	register int		i;
 
 	i = 0;
 	while (i < n)
-		(*inttab)[i] = 0;
+	{
+		*inttab = (int*)malloc(sizeof(int) * n);
+		inttab[i++] = 0;
+	}
 }
 
-static void				ft_init_entLst(t_ent **entLst, int n)
+static void				ft_init_entLst(t_ent ***entLst, int n)
 {
-	int					i;
+	register int		i;
 
 	i = 0;
 	while (i < n)
-		*entLst[i] = NULL;
+		entLst[i++] = NULL;
+}
+
+static int				ft_subrun(t_ent ***entLst, char **argv, int i)
+{
+	ft_entAdd((entLst)[0], ft_entFactory(argv[i - 1]));
+	printf("hello inttab\n");
+		if (ft_getStat(argv[i - 1], &((*(entLst[0]))->stat)) == -1)
+		{
+			ft_entAdd(entLst[1], *(entLst[0]));
+			entLst[0] = NULL;
+		}
+		return (0);
 }
 
 int						ft_run(int argc, char **argv, int i, char *options)
 {
 	/*
-	 *	dirLst[0]: list of operands which are not a file nor a directory
-	 *	dirLst[1]: list of files
-	 *	dirLst[2]: list of directories
+	 *	entLst[0]: entry to test
+	 *	entLst[1]: list of operands which are not a file nor a directory
+	 *	entLst[2]: list of files
+	 *	entLst[3]: list of directories
 	 *	inttab[0]: count
 	 *	inttab[1]: isdirLst[0] indicator
 	 *	inttab[2]: isdirLst[1] indicator
 	 *	inttab[3]: isdirLst[2] indicator
 	 */
 	t_ent				**entLst;
-	int					**inttab;
+	int					*inttab;
 
 	if (i == -1)
 		return (-1);
-	ft_init_inttab(inttab, 4);
-	ft_init_entLst(entLst, 3);
+	ft_init_inttab(&inttab, 4);
+	ft_init_entLst(&entLst, 4);
+	if (i <= argc)
+	{
+		while (i <= argc)
+		{
+			/*if (i > argc)
+			{
+				//afficher les noms des dossiers a rechercher
+			}*/
+		ft_subrun(&entLst, argv, i);
+		}
+	}
+	/*else
+	{
+	}*/
+	(void)options;
+	return (0);
 }
 
 /*int						ft_run(int argc, char **argv, int i, char *options)
@@ -117,15 +142,6 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	struct stat			*dirRaw;
 	t_dir				*check;
 
-	if (i == -1)
-		return (-1);
-	tab[0] = 0;
-	tab[1] = 0;
-	tab[2] = 0;
-	tab[3] = 0;
-	while (tab[0] < 3)
-		dirLst[(tab[0])++] = NULL;
-	tab[0] = i;
 	if (argc >= tab[0])
 		while (tab[0] <= argc)
 		{
@@ -194,4 +210,4 @@ int						ft_run(int argc, char **argv, int i, char *options)
 		free(dirLst[2]);
 	}
 	return (0);
-}
+}*/
