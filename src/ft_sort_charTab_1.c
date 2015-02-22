@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   ft_sort_charTab_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/02/22 02:32:02 by sly              ###   ########.fr       */
+/*   Created: 2015/02/22 02:03:10 by sly               #+#    #+#             */
+/*   Updated: 2015/02/22 02:41:56 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_ls.h>
 #include <libft.h>
-
 #include <stdio.h>
 
-int				main(int argc, char **argv)
+void			ft_sort_charTab(char ***argv, int argc, int start)
 {
-	char		*options;
-	int			ret;
+	int			i;
+	char		*tmp;
 
-	if (!(options = (char*)malloc(sizeof(char) * (OPTION_NB + 1))))
-		return (-1);
-	ft_bzero(options, OPTION_NB);
-	ret = ft_readArg(argc, argv, &options);
-	ft_sort_charTab(&argv, argc, ret);
-	ret = 0;
-	while (ret < argc)
-		ft_putendl(argv[ret++]);
-	ret = ft_run(argc, argv, ret, options);
-	if (ret == -1)
-		return (-1);
-	free(options);
-	return (0);
+	while (start < argc)
+	{
+		tmp = (*argv)[i];
+		i = start;
+		while ((i > 0) && (ft_strcmp((*argv)[i - 1], tmp) > 0))
+		{
+		printf("start:%d, i:%d, *tmp:%s\n", start, i, tmp);
+			(*argv)[i] = (*argv)[i - 1];
+			i--;
+		}
+		(*argv)[i] = tmp;
+		start++;
+	}
 }
