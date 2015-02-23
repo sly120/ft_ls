@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/22 21:06:45 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/23 22:39:44 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,14 @@ static void				ft_init_entLst(t_ent *(*entLst)[4], int n)
 		*entLst[i++] = NULL;
 }
 
-static int				ft_subrun(t_ent *(*entLst)[4], char **argv, int i)
+static void				ft_display_path_return(char *path)
+{
+	ft_putchar('\n');
+	ft_putstr(path);
+	ft_putendl(":");
+}
+
+static int				ft_subrun_loop(t_ent *(*entLst)[4], char **argv, int i)
 {
 	struct stat			*buf;
 
@@ -121,11 +128,9 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	{
 		while (i <= argc)
 		{
-			/*if (i > argc)
-			{
-				//afficher les noms des dossiers a rechercher
-			}*/
-			if (!(ft_subrun(&entLst, argv, i)))
+			if (i < argc)
+				ft_display_path_return(argv[i - 1]);
+			if (!(ft_subrun_loop(&entLst, argv, i)))
 				printf("entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
 			i++;
 		}
@@ -136,7 +141,7 @@ int						ft_run(int argc, char **argv, int i, char *options)
 		ft_getStat(".", &entLst[0]->stat);
 		printf(". entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
 	}
-	(void)options;
+	options = options;
 	printf("i:%d, argc:%d\n", i, argc);
 	return (0);
 }
