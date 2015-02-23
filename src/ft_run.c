@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/19 22:56:54 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/22 21:06:45 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,46 +68,55 @@ static void				ft_init_inttab(int **inttab, int n)
 	}
 }
 
-static void				ft_init_entLst(t_ent ***entLst, int n)
+static void				ft_init_entLst(t_ent *(*entLst)[4], int n)
 {
 	register int		i;
 
 	i = 0;
 	while (i < n)
-		entLst[i++] = NULL;
+		*entLst[i++] = NULL;
 }
 
-static int				ft_subrun(t_ent ***entLst, char **argv, int i)
+static int				ft_subrun(t_ent *(*entLst)[4], char **argv, int i)
 {
-	ft_entAdd((entLst)[0], ft_entFactory(argv[i - 1]));
-	printf("hello inttab\n");
+	struct stat			*buf;
+
+	/*ft_entAdd(entLst[0], ft_entFactory(argv[i - 1]));
+	printf("argv:%s, %p\n", argv[i - 1], entLst[0]);
 		if (ft_getStat(argv[i - 1], &((*(entLst[0]))->stat)) == -1)
 		{
 			ft_entAdd(entLst[1], *(entLst[0]));
 			entLst[0] = NULL;
-		}
-		return (0);
+		}*/
+	if ((ft_getStat(argv[i - 1], &buf) == -1))
+	{
+		ft_error_prefix(argv[i - 1]);
+		return (-1);
+	}
+	ft_entAdd(entLst[0], ft_entFactory(argv[i - 1]));
+	(*entLst)[0]->stat = buf;
+	return (0);
 }
 
 int						ft_run(int argc, char **argv, int i, char *options)
 {
 	/*
-	 *	entLst[0]: entry to test
-	 *	entLst[1]: list of operands which are not a file nor a directory
-	 *	entLst[2]: list of files
-	 *	entLst[3]: list of directories
+	 *	entLst[0]: list of files
+	 *	entLst[1]: list of directories
 	 *	inttab[0]: count
 	 *	inttab[1]: isdirLst[0] indicator
 	 *	inttab[2]: isdirLst[1] indicator
 	 *	inttab[3]: isdirLst[2] indicator
 	 */
-	t_ent				**entLst;
+	t_ent				*entLst[4];
 	int					*inttab;
 
 	if (i == -1)
 		return (-1);
 	ft_init_inttab(&inttab, 4);
+	//printf("inttab:%d\n", inttab[3]);
 	ft_init_entLst(&entLst, 4);
+	//printf("entLst[0]:%p, entLst[1]:%p, entLst[2]:%p, entLst[0]:%p\n", &entLst[0], &entLst[1], &entLst[2], &entLst[3]);
 	if (i <= argc)
 	{
 		while (i <= argc)
@@ -116,13 +125,19 @@ int						ft_run(int argc, char **argv, int i, char *options)
 			{
 				//afficher les noms des dossiers a rechercher
 			}*/
-		ft_subrun(&entLst, argv, i);
+			if (!(ft_subrun(&entLst, argv, i)))
+				printf("entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
+			i++;
 		}
 	}
-	/*else
+	else
 	{
-	}*/
+		ft_entAdd(&entLst[0], ft_entFactory("."));
+		ft_getStat(".", &entLst[0]->stat);
+		printf(". entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
+	}
 	(void)options;
+	printf("i:%d, argc:%d\n", i, argc);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/02/22 02:32:02 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/23 01:04:19 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ int				main(int argc, char **argv)
 	ft_bzero(options, OPTION_NB);
 	ret = ft_readArg(argc, argv, &options);
 	ft_sort_charTab(&argv, argc, ret);
-	ret = 0;
-	while (ret < argc)
+	/*ret = 0;
+	while (argv[ret])
 		ft_putendl(argv[ret++]);
-	ret = ft_run(argc, argv, ret, options);
-	if (ret == -1)
-		return (-1);
-	free(options);
+	*/ft_run(argc, argv, ret, options);
+	//printf("haha\n");
+	//if (ret == -1)
+	//	return (-1);
+	//free(options);
 	return (0);
 }
