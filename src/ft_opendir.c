@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/02/15 18:29:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/26 19:12:38 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 
-static void			ft_free_t_ent(t_ent *entLst)
+/*static void			ft_free_t_ent(t_ent *entLst)
 {
 	t_ent			*csr;
 
@@ -49,7 +49,7 @@ static void			ft_entAdd(t_ent **entLst, t_ent *newEnt)
 		csr->next = newEnt;
 	}
 }
-
+*/
 /*static unsigned char	*ft_unsignedchardup(unsigned char c)
 {
 	unsigned char		*ret;
@@ -61,7 +61,7 @@ static void			ft_entAdd(t_ent **entLst, t_ent *newEnt)
 }
 */
 
-static t_ent		*ft_entNew(char *d_name, unsigned char d_type)
+/*static t_ent		*ft_entNew(char *d_name, unsigned char d_type)
 {
 	t_ent			*tmp;
 
@@ -89,8 +89,8 @@ static int			ft_split(char ***split, char *src)
 	//printf("i:%d, split:%s\n", i, (*split)[i - 1]);
 	return (i - 1);
 }
-
-void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
+*/
+void				ft_openDirecto(char *argv, char* options, char **split)
 {
 	/*
 	 * tab[0]: is entLst indicator
@@ -109,7 +109,7 @@ void				ft_openDirecto(t_dir **dirLst, char* options, char **split)
 	while (csr)
 	{
 		//printf("csr:%s\n", csr->name);
-		if ((dstream = opendir(csr->name)))
+		if ((dstream = opendir(argv)))
 		{
 			entLst[0] = NULL;
 			while ((dirent = readdir(dstream)) != NULL)

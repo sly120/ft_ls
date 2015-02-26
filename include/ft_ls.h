@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/22 02:23:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/24 22:55:48 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int					ft_readArg(int argc, char **argv, char **options);
 int					ft_run(int argc, char ** argv, int i, char *options);
 //void				ft_sort_dir(t_dir **dirLst);
 void				ft_sort_ent(t_ent **entLst);
-//void				ft_openDirecto(t_dir **dirLst, char* options, char **split);
+void				ft_openDirecto(char *argv, char* options, char **split);
 //void				ft_free_t_ent(t_ent *entLst);
 int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_ent *entLst, char *options);
