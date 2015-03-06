@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/02/23 22:39:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/06 22:49:42 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@
 
 static int				ft_getStat(char *path, struct stat **buf)
 {
-	int					ret;
-
 	*buf = (struct stat*)malloc(sizeof(struct stat));
-	return ((ret = stat(path, *buf)));
+	return (stat(path, *buf));
 }
 
-static void				ft_entAdd(t_ent **entLst, t_ent *new)
+void				ft_entAdd(t_ent **entLst, t_ent *new)
 {
 	t_ent				*csr;
 
@@ -43,7 +41,7 @@ static void				ft_entAdd(t_ent **entLst, t_ent *new)
 	}
 }
 
-static t_ent			*ft_entFactory(char *name)
+t_ent			*ft_entFactory(char *name)
 {
 	t_ent				*tmp;
 
@@ -55,7 +53,7 @@ static t_ent			*ft_entFactory(char *name)
 	tmp->next = NULL;
 	return (tmp);
 }
-
+/*
 static void				ft_init_inttab(int **inttab, int n)
 {
 	register int		i;
@@ -76,15 +74,14 @@ static void				ft_init_entLst(t_ent *(*entLst)[4], int n)
 	while (i < n)
 		*entLst[i++] = NULL;
 }
-
+*/
 static void				ft_display_path_return(char *path)
 {
-	ft_putchar('\n');
 	ft_putstr(path);
 	ft_putendl(":");
 }
 
-static int				ft_subrun_loop(t_ent *(*entLst)[4], char **argv, int i)
+static int				ft_isOperand(t_ent **entLst, char *argv)
 {
 	struct stat			*buf;
 
@@ -95,17 +92,31 @@ static int				ft_subrun_loop(t_ent *(*entLst)[4], char **argv, int i)
 			ft_entAdd(entLst[1], *(entLst[0]));
 			entLst[0] = NULL;
 		}*/
-	if ((ft_getStat(argv[i - 1], &buf) == -1))
+	if ((ft_getStat(argv, &buf) == -1))
 	{
-		ft_error_prefix(argv[i - 1]);
+		ft_error_prefix(argv);
 		return (-1);
 	}
-	ft_entAdd(entLst[0], ft_entFactory(argv[i - 1]));
-	(*entLst)[0]->stat = buf;
+	ft_entAdd(entLst, ft_entFactory(argv));
+	(*entLst)->stat = buf;
+	//ft_savePath(entLst);
 	return (0);
 }
 
-int						ft_run(int argc, char **argv, int i, char *options)
+static int				ft_disp(char *argv, t_ent **entLst, char* opt, int *i)
+{
+	if (S_ISDIR((*entLst)->stat->st_mode))
+	{
+		ft_savePath(*entLst);
+		ft_openDirecto(argv, opt, NULL);
+	}
+	else
+		ft_putendl(argv);
+	*i = 1;
+	return (0);
+}
+
+int						ft_run_1(int argc, char **argv, int i, char *options)
 {
 	/*
 	 *	entLst[0]: list of files
@@ -115,34 +126,51 @@ int						ft_run(int argc, char **argv, int i, char *options)
 	 *	inttab[2]: isdirLst[1] indicator
 	 *	inttab[3]: isdirLst[2] indicator
 	 */
-	t_ent				*entLst[4];
-	int					*inttab;
+	t_ent				*entLst;
+	int					indic;
 
 	if (i == -1)
 		return (-1);
-	ft_init_inttab(&inttab, 4);
+	//ft_init_inttab(&inttab, 4);
 	//printf("inttab:%d\n", inttab[3]);
-	ft_init_entLst(&entLst, 4);
+	//ft_init_entLst(&entLst, 4);
 	//printf("entLst[0]:%p, entLst[1]:%p, entLst[2]:%p, entLst[0]:%p\n", &entLst[0], &entLst[1], &entLst[2], &entLst[3]);
-	if (i <= argc)
+	indic = 0;
+	entLst = NULL;
+	if (i == argc)
 	{
-		while (i <= argc)
+		if (!(ft_isOperand(&entLst, argv[i - 1])))
 		{
-			if (i < argc)
-				ft_display_path_return(argv[i - 1]);
-			if (!(ft_subrun_loop(&entLst, argv, i)))
-				printf("entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
-			i++;
+			printf("entLst->stat:%d\n", entLst->stat->st_mode);
+			ft_disp(argv[i - 1], &entLst, options, &indic);
 		}
 	}
+	else if (i < argc)
+		while (i <= argc)
+		{
+			ft_display_path_return(argv[i - 1]);
+			if (!(ft_isOperand(&entLst, argv[i - 1])))
+			{
+				printf("entLst[0]->stat:%d\n", entLst->stat->st_mode);
+				ft_disp(argv[i - 1], &entLst, options, &indic);
+			}
+			i++;
+		}
 	else
 	{
-		ft_entAdd(&entLst[0], ft_entFactory("."));
-		ft_getStat(".", &entLst[0]->stat);
-		printf(". entLst[0]->stat:%d\n", entLst[0]->stat->st_mode);
+		ft_entAdd(&entLst, ft_entFactory("."));
+		ft_getStat(".", &entLst->stat);
+		printf(". entLst[0]->stat:%d\n", entLst->stat->st_mode);
+		ft_disp(argv[i - 1], &entLst, options, &indic);
 	}
 	options = options;
 	printf("i:%d, argc:%d\n", i, argc);
+	return (0);
+}
+
+int							ft_run(int argc, char **argv, int i, char *options)
+{
+	ft_run_1(argc, argv, i, options);
 	return (0);
 }
 
