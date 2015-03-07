@@ -6,7 +6,7 @@
 #    By: sly <sly@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/13 21:00:43 by sly               #+#    #+#              #
-#    Updated: 2015/03/06 20:33:47 by sly              ###   ########.fr        #
+#    Updated: 2015/03/07 17:52:50 by sly              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,6 @@ INC = $(addprefix -I , $(INC_PATH))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIB_NAME)
-	$(CC) $(CFLAGS) $(LIBOPTION) $(LIB_NAME) $(INC) -g -o $(NAME) $(LIB_NAME) $(OBJ)
-
-noflag: $(OBJ) $(LIB_NAME)
 	$(CC) $(LIBOPTION) $(LIB_NAME) $(INC) -g -o $(NAME) $(LIB_NAME) $(OBJ)
 
 $(LIB_NAME): libfclean
@@ -42,7 +39,7 @@ libfclean:
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+	$(CC) $(INC) -o $@ -c $<
 
 .PHONY: clean $(LIB_NAME) fclean all re norme libfclean
 

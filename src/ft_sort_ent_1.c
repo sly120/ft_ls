@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/08 16:41:21 by sly               #+#    #+#             */
-/*   Updated: 2015/02/12 19:01:17 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/07 20:39:46 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,10 @@ void					ft_sort_ent(t_ent **entLst)
 	else
 		i = count - 1;
 	*entLst = entTab[i];
-	csr = *entLst;
+	/*csr = *entLst;
      while (csr)
      {
      //printf("tri:%s\n", csr->name);
      csr = csr->next;
-     }
+     }*/
 }

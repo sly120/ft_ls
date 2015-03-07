@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 22:33:03 by sly               #+#    #+#             */
-/*   Updated: 2015/02/23 22:18:05 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/07 17:54:10 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ int				main(int argc, char **argv)
 	while (argv[ret])
 		ft_putendl(argv[ret++]);
 	*/ret = ft_run(argc, argv, ret, options);
-	ft_putstr("hehe\n");
 	if (ret == -1)
 		return (-1);
 	free(options);
-	ft_putstr("haha\n");
 	return (0);
 }

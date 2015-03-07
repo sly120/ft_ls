@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/02/15 18:37:06 by sly              ###   ########.fr       */
+/*   Updated: 2015/02/19 22:29:49 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 		free(tab[i]);
 }*/
 
-static char			**ft_t_entToCharTab(t_ent *entLst)
+/*static char			**ft_t_entToCharTab(t_ent *entLst)
 {
 	char			**tab;
 
@@ -52,14 +52,14 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 {
 	t_ent			*csr;
 	char			**tab;
-
+*/
 	/*csr = entLst;
 	while (csr)
 	{
 		printf("csr:%s, type:%u\n", csr->name, csr->type);
 		csr = csr->next;
 	}*/
-	csr = entLst;
+/*	csr = entLst;
 	while (csr)
 	{
 		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
@@ -75,4 +75,4 @@ void				ft_recursive_ls(t_ent *entLst, char *options)
 		csr = csr->next;
 	}
 	//printf("options:%s, count:%d\n", options, count);
-}
+}*/
