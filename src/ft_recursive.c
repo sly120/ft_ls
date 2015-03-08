@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/02/19 22:29:49 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/08 22:57:46 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,50 +29,33 @@
 		free(tab[i]);
 }*/
 
-/*static char			**ft_t_entToCharTab(t_ent *entLst)
-{
-	char			**tab;
-
-	if (!(tab = (char**)malloc(sizeof(char*) * 2)))
-		return (NULL);
-	if (entLst->type == DT_DIR)
-	{
-		//printf("csr before:%s\n", csr->name);
-		if ((ft_strcmp(entLst->name, ".")) && (ft_strcmp(entLst->name, "..")))
-		{
-			tab[0] = ft_strdup(entLst->name);
-			//printf("csr name:%s, tab i:%s\n", csr->name, tab[i - 1]);
-		}
-	}
-	tab[1] = NULL;
-	return (tab);
-}
-
-void				ft_recursive_ls(t_ent *entLst, char *options)
+void				ft_recursive_ls(t_info *info, t_ent *entLst)
 {
 	t_ent			*csr;
-	char			**tab;
-*/
+
 	/*csr = entLst;
 	while (csr)
 	{
-		printf("csr:%s, type:%u\n", csr->name, csr->type);
+		printf("csr:%s\n", csr->name);
 		csr = csr->next;
 	}*/
-/*	csr = entLst;
+	csr = entLst;
 	while (csr)
 	{
-		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
+			/*printf("csr name:%s", csr->name);
+			printf(", isdir:%d", S_ISDIR(csr->stat->st_mode));
+			printf(", strcmp .:%d", ft_strcmp(csr->name, "."));
+			printf(", strcmp ..:%d\n", ft_strcmp(csr->name, ".."));*/
+		if (entLst->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
 		{
-			if (!(tab = ft_t_entToCharTab(csr)))
-				return ;
+			ft_add_path(csr, csr->name);
 			ft_putchar('\n');
-			ft_putstr(tab[0]);
+			ft_putstr(csr->path);
 			ft_putendl(":");
-			ft_run(1, tab, 1, options);
+			//ft_run(1, tab, 1, options);
 			//ft_free_tabchar(tab, 1);
 		}
 		csr = csr->next;
 	}
 	//printf("options:%s, count:%d\n", options, count);
-}*/
+}

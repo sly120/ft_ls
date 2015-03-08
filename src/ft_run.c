@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/08 00:01:06 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/08 22:05:30 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,14 @@
 
 #include <stdio.h>
 
-void					ft_init_info(t_info *info, int argc, char **argv, int i)
+void					ft_init_info(t_info *info, int argc, int i)
 {
 	info->ac = argc;
-	info->av = argv;
 	info->pos = i;
 	info->is_inrec = 0;
 }
 
-static int				ft_getStat(char *path, struct stat **buf)
+int					ft_get_stat(char *path, struct stat **buf)
 {
 	*buf = (struct stat*)malloc(sizeof(struct stat));
 	return (stat(path, *buf));
@@ -71,35 +70,22 @@ t_ent			*ft_entFactory(char *name)
 	tmp->next = NULL;
 	return (tmp);
 }
-/*
-static void				ft_init_inttab(int **inttab, int n)
-{
-	register int		i;
 
-	i = 0;
-	while (i < n)
-	{
-		*inttab = (int*)malloc(sizeof(int) * n);
-		inttab[i++] = 0;
-	}
-}
-
-static void				ft_init_arglst(t_ent *(*arglst)[4], int n)
+static void				ft_disp_path(t_ent *ent)
 {
-	register int		i;
-
-	i = 0;
-	while (i < n)
-		*arglst[i++] = NULL;
-}
-*/
-static void				ft_disp_self_name(char *name)
-{
-	ft_putstr(name);
+	ft_putstr(ent->path);
 	ft_putendl(":");
 }
 
-static int				ft_isOperand(t_ent **arglst, char *argv)
+void					ft_addentlst(t_ent **elst, char *name, struct stat *buf)
+{
+	ft_entAdd(elst, ft_entFactory(name));
+	ft_add_path(*elst, name);
+	//printf("arglst path:%s\n", (*arglst)->path);
+	(*elst)->stat = buf;
+}
+
+static int				ft_isoperand(t_ent **arglst, char *argv)
 {
 	struct stat			*buf;
 
@@ -110,30 +96,26 @@ static int				ft_isOperand(t_ent **arglst, char *argv)
 			ft_entAdd(arglst[1], *(arglst[0]));
 			arglst[0] = NULL;
 		}*/
-	if ((ft_getStat(argv, &buf) == -1))
+	if ((ft_get_stat(argv, &buf) == -1))
 	{
 		ft_error_prefix(argv);
 		return (-1);
 	}
-	ft_entAdd(arglst, ft_entFactory(argv));
-	(*arglst)->stat = buf;
+	ft_addentlst(arglst, argv, buf);
 	return (0);
 }
 
 static int				ft_disp(t_info *info, t_ent *arglst,char* name, int *i)
 {
 	if (S_ISDIR(arglst->stat->st_mode))
-	{
-		ft_add_path(arglst, name);
-		ft_openDirecto(info, arglst, NULL);
-	}
+		ft_open_dir(info, arglst, NULL);
 	else
 		ft_putendl(name);
 	*i = 1;
 	return (0);
 }
 
-void					ft_run_1(t_info *info)
+void					ft_run_1(t_info *info, char **argv)
 {
 	/*
 	 *	arglst[0]: list of files
@@ -157,19 +139,19 @@ void					ft_run_1(t_info *info)
 	if (i <= info->ac)
 		while (i <= info->ac)
 		{
-			if (!(ft_isOperand(&arglst, info->av[i - 1])))
+			if (!(ft_isoperand(&arglst, argv[i - 1])))
 			{
-				if (info->pos < info->ac)
-					ft_disp_self_name(info->av[i - 1]);
-				//printf("arglst->stat:%d\n", arglst->stat->st_mode);
-				ft_disp(info, arglst, info->av[i - 1], &indic);
+				//printf("arglst->stat:%d, info inrec:%d\n", arglst->stat->st_mode, info->is_inrec);
+				if (info->pos < info->ac || info->is_inrec)
+					ft_disp_path(arglst);
+				ft_disp(info, arglst, argv[i - 1], &indic);
 				if (i++ < info->ac)
 					ft_putchar('\n');
 			}
 		}
 	else
 	{
-		ft_isOperand(&arglst, ".");
+		ft_isoperand(&arglst, ".");
 		//printf(". arglst[0]->stat:%d\n", arglst->stat->st_mode);
 		ft_disp(info, arglst, ".", &indic);
 	}
@@ -183,10 +165,10 @@ int							ft_run(int argc, char **argv, int i, char *options)
 
 	if (i == -1)
 		return (-1);
-	ft_init_info(&info, argc, argv, i);
+	ft_init_info(&info, argc, i);
 	info.opt = options;
 	//printf("info options:%s, argc:%d, argv[0]:%s, is_inrec:%d\n", info.opt, info.ac, info.av[2], info.is_inrec);
-	ft_run_1(&info);
+	ft_run_1(&info, argv);
 	return (0);
 }
 

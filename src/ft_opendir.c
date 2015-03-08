@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/08 00:01:05 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/09 00:24:50 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,16 @@ void				ft_disp_dirent(t_ent *entLst, char *options)
 	}
 }
 
-void				ft_openDirecto(t_info *info, t_ent *entLst, char **split)
+void				ft_open_dir_1(t_info *info, t_ent *entlst)
+{
+		ft_sort_ent(&entlst);
+		ft_disp_dirent(entlst, info->opt);
+		printf("entLst:%s\n", entlst->name);
+		if (ft_option_check(info->opt, 'R'))
+			ft_recursive_ls(info, entlst);
+}
+
+void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 {
 	/*
 	 * indic[0]: isdirent indicator
@@ -110,27 +119,27 @@ void				ft_openDirecto(t_info *info, t_ent *entLst, char **split)
 	DIR				*dstream;
 	struct dirent	*dirent;
 	t_ent			*entlst;
-	t_ent			*csr;
+	struct stat		*buf;
 
 	indic[0] = 0;
 	indic[1] = 0;
 	entlst = NULL;
-	if ((dstream = opendir(entLst->name)))
+	if ((dstream = opendir(arglst->name)))
 	{
 		while ((dirent = readdir(dstream)))
 		{
 			//ft_putstr(dirent->d_name);
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
-			ft_entAdd(&entlst, ft_entFactory(dirent->d_name));
+			ft_get_stat(dirent->d_name, &buf);
+			ft_addentlst(&entlst, dirent->d_name, buf);
+			printf("name:%s, dir:%u, stat:%d\n", dirent->d_name, dirent->d_type == DT_DIR, S_ISDIR(entlst->stat->st_mode));
+			entlst->path = ft_strdup(arglst->path);
+			entlst->type = dirent->d_type;
 			indic[0] = 1;
 		}
-		ft_sort_ent(&entlst);
-		ft_disp_dirent(entlst, info->opt);
-		//printf("options:%d\n", tab[1]);
-		/*if (ft_option_check(options, 'R'))
-			ft_recursive_ls(entLst[0], options);
-		ft_free_t_ent(entLst[0]);*/
+		ft_open_dir_1(info, entlst);
+		/*ft_free_t_ent(entLst[0]);*/
 		//printf("\nok\n");
 		(void)closedir(dstream);
 	}
@@ -138,7 +147,7 @@ void				ft_openDirecto(t_info *info, t_ent *entLst, char **split)
 	{
 		printf("hello\n");
 		split = NULL;
-		indic[1] = ft_split(&split, entLst->name);
+		indic[1] = ft_split(&split, entlst->name);
 		ft_error_prefix(split[indic[1]]);
 		free(split);
 	}
