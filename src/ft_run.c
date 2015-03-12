@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/08 22:05:30 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/12 15:26:32 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,21 @@ static int				ft_disp(t_info *info, t_ent *arglst,char* name, int *i)
 	return (0);
 }
 
+void					ft_freeentlst(t_ent *ent)
+{
+	t_ent				*csr;
+
+	while (ent)
+	{
+		csr = ent->next;
+		free(ent->name);
+		free(ent->stat);
+		free(ent->path);
+		free(ent);
+		ent = csr;
+	}
+}
+
 void					ft_run_1(t_info *info, char **argv)
 {
 	/*
@@ -136,8 +151,8 @@ void					ft_run_1(t_info *info, char **argv)
 	i = info->pos;
 	indic = 0;
 	arglst = NULL;
-	if (i <= info->ac)
-		while (i <= info->ac)
+	if (i-- <= info->ac)
+		while (++i <= info->ac)
 		{
 			if (!(ft_isoperand(&arglst, argv[i - 1])))
 			{
@@ -145,7 +160,7 @@ void					ft_run_1(t_info *info, char **argv)
 				if (info->pos < info->ac || info->is_inrec)
 					ft_disp_path(arglst);
 				ft_disp(info, arglst, argv[i - 1], &indic);
-				if (i++ < info->ac)
+				if (i < info->ac)
 					ft_putchar('\n');
 			}
 		}
@@ -155,7 +170,8 @@ void					ft_run_1(t_info *info, char **argv)
 		//printf(". arglst[0]->stat:%d\n", arglst->stat->st_mode);
 		ft_disp(info, arglst, ".", &indic);
 	}
-	//!!!!!!!!free
+	if (indic)
+		ft_freeentlst(arglst);
 	//printf("i:%d, argc:%d\n", i, argc);
 }
 
@@ -169,6 +185,7 @@ int							ft_run(int argc, char **argv, int i, char *options)
 	info.opt = options;
 	//printf("info options:%s, argc:%d, argv[0]:%s, is_inrec:%d\n", info.opt, info.ac, info.av[2], info.is_inrec);
 	ft_run_1(&info, argv);
+	//free
 	return (0);
 }
 

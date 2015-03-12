@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/03/08 22:57:46 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/12 15:13:21 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ void				ft_recursive_ls(t_info *info, t_ent *entLst)
 	csr = entLst;
 	while (csr)
 	{
-			/*printf("csr name:%s", csr->name);
+			printf("csr name:%s", csr->name);
 			printf(", isdir:%d", S_ISDIR(csr->stat->st_mode));
+			printf(", dirtype:%u", csr->type == DT_DIR);
 			printf(", strcmp .:%d", ft_strcmp(csr->name, "."));
-			printf(", strcmp ..:%d\n", ft_strcmp(csr->name, ".."));*/
-		if (entLst->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
+			printf(", strcmp ..:%d\n", ft_strcmp(csr->name, ".."));
+		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
 		{
 			ft_add_path(csr, csr->name);
 			ft_putchar('\n');
