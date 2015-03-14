@@ -6,12 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/08 00:05:26 by sly               #+#    #+#             */
-/*   Updated: 2015/03/08 00:05:29 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:45:40 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-//#include <stdio.h>
 
 void			ft_sort_charTab(char ***argv, int argc, int start)
 {

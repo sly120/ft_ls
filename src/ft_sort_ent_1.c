@@ -6,14 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/08 16:41:21 by sly               #+#    #+#             */
-/*   Updated: 2015/03/07 20:39:46 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:45:52 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_ls.h>
-#include <libft.h>
-
-#include <stdio.h>
 
 t_ent			**ft_t_entToTab(t_ent **entLst, int n)
 {

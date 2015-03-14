@@ -6,17 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/09 00:24:50 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:45:04 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <ft_ls.h>
-#include <sys/stat.h>
-#include <sys/errno.h>
-#include <dirent.h>
-
-#include <stdio.h>
 
 /*static void			ft_free_t_ent(t_ent *entLst)
 {
@@ -104,7 +98,7 @@ void				ft_open_dir_1(t_info *info, t_ent *entlst)
 {
 		ft_sort_ent(&entlst);
 		ft_disp_dirent(entlst, info->opt);
-		printf("entLst:%s\n", entlst->name);
+		//printf("entLst:%s\n", entlst->name);
 		if (ft_option_check(info->opt, 'R'))
 			ft_recursive_ls(info, entlst);
 }
@@ -133,9 +127,9 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
 			ft_get_stat(dirent->d_name, &buf);
 			ft_addentlst(&entlst, dirent->d_name, buf);
-			printf("name:%s, dir:%u, stat:%d\n", dirent->d_name, dirent->d_type == DT_DIR, S_ISDIR(entlst->stat->st_mode));
-			entlst->path = ft_strdup(arglst->path);
 			entlst->type = dirent->d_type;
+			entlst->path = ft_strdup(arglst->path);
+			//printf("name:%s, dir:%u, stat:%d\n", entlst->name, entlst->type == DT_DIR, S_ISDIR(entlst->stat->st_mode));
 			indic[0] = 1;
 		}
 		ft_open_dir_1(info, entlst);

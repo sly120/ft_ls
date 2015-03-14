@@ -6,13 +6,19 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/12 17:53:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:44:36 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	ifndef FT_LS_H
 #define FT_LS_H
 #define OPTION_NB 5
+
+#include <libft.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/errno.h>
+#include <stdio.h>
 
 typedef struct		s_ent
 {
@@ -39,11 +45,11 @@ t_ent				*ft_entFactory(char *name);
 void				ft_entAdd(t_ent **entlst, t_ent *new);
 void				ft_addentlst(t_ent **entlst, char *name, struct stat *buf);
 void				ft_add_path(t_ent *ent, char *name);
-//void				ft_sort_dir(t_dir **dirLst);
 void				ft_sort_ent(t_ent **entlst);
 void				ft_open_dir(t_info *info, t_ent *entlst, char **split);
-//void				ft_free_t_ent(t_ent *entLst);
 int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_info *info, t_ent *entlst);
+void				ft_run_ent(t_info *info, t_ent *entlst);
 void				ft_error_prefix(char *s);
+void				ft_freeentlst(t_ent *ent);
 #	endif

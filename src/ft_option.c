@@ -6,14 +6,11 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/08 17:17:29 by sly               #+#    #+#             */
-/*   Updated: 2015/02/08 19:00:33 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:45:00 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_ls.h>
-#include <libft.h>
-
-#include <stdio.h>
 
 int				ft_option_check(char *options, char c)
 {

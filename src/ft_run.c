@@ -6,23 +6,27 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/12 15:26:32 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 00:45:10 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <ft_ls.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <sys/errno.h>
-
-#include <stdio.h>
 
 void					ft_init_info(t_info *info, int argc, int i)
 {
 	info->ac = argc;
 	info->pos = i;
 	info->is_inrec = 0;
+}
+
+void					ft_init_inttab(int (*inttab)[2])
+{
+	int					i;
+
+	i = 0;
+	while (i < 2)
+		(*inttab)[i++] = 0;
+	return ;
 }
 
 int					ft_get_stat(char *path, struct stat **buf)
@@ -105,13 +109,36 @@ static int				ft_isoperand(t_ent **arglst, char *argv)
 	return (0);
 }
 
-static int				ft_disp(t_info *info, t_ent *arglst,char* name, int *i)
+static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 {
-	if (S_ISDIR(arglst->stat->st_mode))
-		ft_open_dir(info, arglst, NULL);
-	else
-		ft_putendl(name);
-	*i = 1;
+	int					i;
+	t_ent				*csr;
+
+	i = 0;
+	ft_sort_ent(&entlst);
+	csr = entlst;
+	while (csr)
+	{
+		if (!S_ISDIR(csr->stat->st_mode))
+		{
+			ft_putendl(csr->name);
+			i = 1;
+		}
+		csr = csr->next;
+	}
+	while (entlst)
+	{
+		if (S_ISDIR(entlst->stat->st_mode))
+		{
+			if (i)
+				ft_putchar('\n');
+			if ((*indic)[0] > 1 && (*indic)[1])
+				ft_disp_path(entlst);
+			ft_open_dir(info, entlst, NULL);
+			i = 1;
+		}
+		entlst = entlst->next;
+	}
 	return (0);
 }
 
@@ -133,15 +160,11 @@ void					ft_freeentlst(t_ent *ent)
 void					ft_run_1(t_info *info, char **argv)
 {
 	/*
-	 *	arglst[0]: list of files
-	 *	arglst[1]: list of directories
-	 *	inttab[0]: count
-	 *	inttab[1]: isdirLst[0] indicator
-	 *	inttab[2]: isdirLst[1] indicator
-	 *	inttab[3]: isdirLst[2] indicator
+	 *	inttab[0]: count of existing elements
+	 *	inttab[1]: dir indicator
 	 */
 	t_ent				*arglst;
-	int					indic;
+	int					indic[2];
 	int					i;
 
 	//ft_init_inttab(&inttab, 4);
@@ -149,28 +172,32 @@ void					ft_run_1(t_info *info, char **argv)
 	//ft_init_arglst(&arglst, 4);
 	//printf("arglst[0]:%p, arglst[1]:%p, arglst[2]:%p, arglst[0]:%p\n", &arglst[0], &arglst[1], &arglst[2], &arglst[3]);
 	i = info->pos;
-	indic = 0;
+	ft_init_inttab(&indic);
 	arglst = NULL;
 	if (i-- <= info->ac)
+	{
 		while (++i <= info->ac)
-		{
 			if (!(ft_isoperand(&arglst, argv[i - 1])))
 			{
+				indic[0]++;
+				S_ISDIR(arglst->stat->st_mode) ? indic[1] = 1 : 1 ;
 				//printf("arglst->stat:%d, info inrec:%d\n", arglst->stat->st_mode, info->is_inrec);
-				if (info->pos < info->ac || info->is_inrec)
+
+				/*if (info->pos < info->ac)
 					ft_disp_path(arglst);
-				ft_disp(info, arglst, argv[i - 1], &indic);
 				if (i < info->ac)
-					ft_putchar('\n');
+					ft_putchar('\n');*/
 			}
-		}
+		if (arglst)
+			ft_disp(info, arglst, &indic);
+	}
 	else
 	{
 		ft_isoperand(&arglst, ".");
 		//printf(". arglst[0]->stat:%d\n", arglst->stat->st_mode);
-		ft_disp(info, arglst, ".", &indic);
+		ft_disp(info, arglst, &indic);
 	}
-	if (indic)
+	if (indic[0])
 		ft_freeentlst(arglst);
 	//printf("i:%d, argc:%d\n", i, argc);
 }
@@ -187,6 +214,19 @@ int							ft_run(int argc, char **argv, int i, char *options)
 	ft_run_1(&info, argv);
 	//free
 	return (0);
+}
+
+void						ft_run_ent(t_info *info, t_ent *entlst)
+{
+	/*t_ent					*csr;
+
+	csr = entlst;
+	while (csr)
+	{
+		if (
+		csr = csr->next;
+	}*/
+	printf("hello\n");
 }
 
 /*int						ft_run(int argc, char **argv, int i, char *options)
