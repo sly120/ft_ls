@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/08 17:17:29 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 00:45:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 23:42:47 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,18 @@ static int		ft_addOption(char **options, char c)
 	s[0] = c;
 	s[1] = '\0';
 	ft_strcat(*options, s);
+	free(s);
 	return (0);
 }
 
-static int		ft_isOption(char c, char **options)
+static int		ft_isOption(char c, char **options, char *ref)
 {
 	int			i;
-	char		*ref;
+	int			j;
 
-	if (!(ref = (char*)malloc(sizeof(char) * 6)))
-		return (-1);
-	ref = "Ralrt";
-	while (*ref)
-		if (c == *ref++)
+	j = 0;
+	while (ref[j])
+		if (c == ref[j++])
 		{
 			i = 0;
 			while ((*options)[i])
@@ -58,7 +57,6 @@ static int		ft_isOption(char c, char **options)
 				return (-1);
 			return (1);
 		}
-	//free(ref);
 	return (0);
 }
 
@@ -72,7 +70,7 @@ static int		ft_readValidOptions(char *arg, char **options)
 		return (-2);
 	while (++i < ft_strlen(arg))
 	{
-		ret = ft_isOption(arg[i], options);
+		ret = ft_isOption(arg[i], options, OPTION_POSSIBILITIES);
 		if (ret == 0)
 		{
 			if (i == 1 && arg[i] == '-' && arg[i + 1] == '\0')

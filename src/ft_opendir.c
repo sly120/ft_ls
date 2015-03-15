@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 00:45:04 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 23:29:35 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int			ft_split(char ***split, char *src)
 	return (i - 1);
 }
 
-void				ft_disp_dirent(t_ent *entLst, char *options)
+void				ft_disp_ent(t_ent *entLst, char *options)
 {
 	while (entLst)
 	{
@@ -96,8 +96,7 @@ void				ft_disp_dirent(t_ent *entLst, char *options)
 
 void				ft_open_dir_1(t_info *info, t_ent *entlst)
 {
-		ft_sort_ent(&entlst);
-		ft_disp_dirent(entlst, info->opt);
+		ft_disp_ent(entlst, info->opt);
 		//printf("entLst:%s\n", entlst->name);
 		if (ft_option_check(info->opt, 'R'))
 			ft_recursive_ls(info, entlst);
@@ -118,7 +117,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 	indic[0] = 0;
 	indic[1] = 0;
 	entlst = NULL;
-	if ((dstream = opendir(arglst->name)))
+	/*if ((dstream = opendir(arglst->name)))
 	{
 		while ((dirent = readdir(dstream)))
 		{
@@ -132,10 +131,10 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 			//printf("name:%s, dir:%u, stat:%d\n", entlst->name, entlst->type == DT_DIR, S_ISDIR(entlst->stat->st_mode));
 			indic[0] = 1;
 		}
-		ft_open_dir_1(info, entlst);
-		/*ft_free_t_ent(entLst[0]);*/
+		ft_sort_ent(&entlst);
+		//ft_open_dir_1(info, entlst);
 		//printf("\nok\n");
-		(void)closedir(dstream);
+		closedir(dstream);
 	}
 	else
 	{
@@ -144,5 +143,6 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 		indic[1] = ft_split(&split, entlst->name);
 		ft_error_prefix(split[indic[1]]);
 		free(split);
-	}
+	}*/
+	entlst ? ft_freeentlst(entlst) : 1;
 }

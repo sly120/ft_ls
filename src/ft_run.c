@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 00:45:10 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/16 00:23:17 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,14 @@ static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{
-			ft_putendl(csr->name);
-			i = 1;
-		}
+			ft_putendl(csr->name); i = 1;
 		csr = csr->next;
 	}
 	while (entlst)
 	{
 		if (S_ISDIR(entlst->stat->st_mode))
 		{
-			if (i)
-				ft_putchar('\n');
+			i ? ft_putchar('\n') : 1;
 			if ((*indic)[0] > 1 && (*indic)[1])
 				ft_disp_path(entlst);
 			ft_open_dir(info, entlst, NULL);
@@ -149,6 +145,9 @@ void					ft_freeentlst(t_ent *ent)
 	while (ent)
 	{
 		csr = ent->next;
+		printf("free:%s\n", ent->name);
+		printf("free:%p\n", ent);
+		printf("free->next:%p, ptr null:%d\n", csr, csr == NULL);
 		free(ent->name);
 		free(ent->stat);
 		free(ent->path);
@@ -216,17 +215,15 @@ int							ft_run(int argc, char **argv, int i, char *options)
 	return (0);
 }
 
-void						ft_run_ent(t_info *info, t_ent *entlst)
+void						ft_run_ent(t_info *info, t_ent *entry)
 {
-	/*t_ent					*csr;
-
-	csr = entlst;
-	while (csr)
+	/*while (entry)
 	{
-		if (
-		csr = csr->next;
+		if (entry->type == DT_DIR)
+			ft_open_dir(info, entry, NULL);
+		entry = entry->next;
 	}*/
-	printf("hello\n");
+	printf("ahoy\n");
 }
 
 /*int						ft_run(int argc, char **argv, int i, char *options)

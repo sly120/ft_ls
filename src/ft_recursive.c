@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 00:45:14 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/15 20:57:26 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void				ft_recursive_ls(t_info *info, t_ent *entlst)
 		printf("csr:%s\n", csr->name);
 		csr = csr->next;
 	}*/
-	i = 0;
 	csr = entlst;
 	while (csr)
 	{
@@ -45,7 +44,6 @@ void				ft_recursive_ls(t_info *info, t_ent *entlst)
 			printf(", strcmp ..:%d\n", ft_strcmp(csr->name, ".."));*/
 		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
 		{
-			i = 1;
 			ft_add_path(csr, csr->name);
 			ft_putchar('\n');
 			ft_putstr(csr->path);
@@ -54,7 +52,5 @@ void				ft_recursive_ls(t_info *info, t_ent *entlst)
 		}
 		csr = csr->next;
 	}
-	if (i)
-		ft_freeentlst(entlst);
 	//printf("options:%s, count:%d\n", options, count);
 }
