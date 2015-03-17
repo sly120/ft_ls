@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/17 20:28:09 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/17 22:19:00 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void					ft_init_info(t_info *info, int argc, int i)
 {
 	info->ac = argc;
 	info->pos = i;
-	info->is_inrec = 0;
 }
 
 void					ft_init_inttab(int (*inttab)[2])
@@ -117,7 +116,7 @@ static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-			ft_putendl(csr->name); i = 1;
+		{ ft_putendl(csr->name); i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)
@@ -212,13 +211,12 @@ int							ft_run(int argc, char **argv, int i, char *options)
 
 void						ft_run_ent(t_info *info, t_ent *entry)
 {
-	/*while (entry)
-	{
 		if (entry->type == DT_DIR)
+		{
+			//printf("entry name:%s, path:%s\n", entry->name, entry->path);
 			ft_open_dir(info, entry, NULL);
-		entry = entry->next;
-	}*/
-	printf("ahoy\n");
+		}
+	ft_putstr("ahoy\n");
 }
 
 /*int						ft_run(int argc, char **argv, int i, char *options)

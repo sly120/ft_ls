@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 23:42:51 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/17 20:36:49 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct		s_info
 	char			*opt;
 	int				ac;
 	int				pos;
-	char			is_inrec;
 }					t_info;
 
 void				ft_sort_charTab(char ***argv, int argc, int start);

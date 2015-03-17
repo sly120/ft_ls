@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/17 20:28:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/17 22:28:43 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 	{
 		while ((dirent = readdir(dstream)))
 		{
-			//ft_putstr(dirent->d_name);
+			ft_putstr(dirent->d_name);
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
 			ft_get_stat(dirent->d_name, &buf);
@@ -132,17 +132,14 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 			indic[0] = 1;
 		}
 		ft_sort_ent(&entlst);
-		//ft_open_dir_1(info, entlst);
-		//printf("\nok\n");
+		ft_open_dir_1(info, entlst);
 		closedir(dstream);
 	}
 	else
 	{
-		//printf("hello\n");
+		printf("hello\n");
 		split = NULL;
-		indic[1] = ft_split(&split, entlst->name);
-		ft_error_prefix(split[indic[1]]);
-		free(split);
+		ft_error_prefix(arglst->name);
 	}
 	if (entlst)
 		ft_freeentlst(entlst);
