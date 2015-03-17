@@ -6,7 +6,7 @@
 #    By: sly <sly@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/13 21:00:43 by sly               #+#    #+#              #
-#    Updated: 2015/03/07 17:52:50 by sly              ###   ########.fr        #
+#    Updated: 2015/03/17 18:11:38 by sly              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIB_PATH = ./libft/
 LIB_NAME = -lft
 AR = ar rc
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS += -Wall -Wextra -Werror
 OBJ_NAME = $(SRC_NAME:.c=.o)
 SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
@@ -29,7 +29,7 @@ INC = $(addprefix -I , $(INC_PATH))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIB_NAME)
-	$(CC) $(LIBOPTION) $(LIB_NAME) $(INC) -g -o $(NAME) $(LIB_NAME) $(OBJ)
+	$(CC) $(LIBOPTION) $(LIB_NAME) $(INC) -o $(NAME) $(LIB_NAME) $(OBJ)
 
 $(LIB_NAME): libfclean
 	make -C libft

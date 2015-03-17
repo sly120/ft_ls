@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/16 00:23:17 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/17 20:28:09 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void				ft_entAdd(t_ent **arglst, t_ent *new)
 
 void			ft_add_path(t_ent *ent, char *name)
 {
-	char		*s;
+	char		*tmp;
 	int			len;
 
 	if (!ent->path)
@@ -53,13 +53,10 @@ void			ft_add_path(t_ent *ent, char *name)
 		ent->path = ft_strdup(name);
 		return ;
 	}
-	len = ft_strlen(ent->path) + ft_strlen(name) + 2;
-	s = (char*)malloc(sizeof(char) * len);
-	s = ft_strcpy(s, ent->path);
-	s = ft_strcat(s, "/");
-	s = ft_strcat(s, name);
+	tmp = ft_strjoin(ent->path, "/");
 	free(ent->path);
-	ent->path = s;
+	ent->path = ft_strjoin(tmp, name);
+	free(tmp);
 }
 
 t_ent			*ft_entFactory(char *name)
@@ -84,7 +81,6 @@ static void				ft_disp_path(t_ent *ent)
 void					ft_addentlst(t_ent **elst, char *name, struct stat *buf)
 {
 	ft_entAdd(elst, ft_entFactory(name));
-	ft_add_path(*elst, name);
 	//printf("arglst path:%s\n", (*arglst)->path);
 	(*elst)->stat = buf;
 }
@@ -106,6 +102,7 @@ static int				ft_isoperand(t_ent **arglst, char *argv)
 		return (-1);
 	}
 	ft_addentlst(arglst, argv, buf);
+	ft_add_path(*arglst, argv);
 	return (0);
 }
 
@@ -145,9 +142,7 @@ void					ft_freeentlst(t_ent *ent)
 	while (ent)
 	{
 		csr = ent->next;
-		printf("free:%s\n", ent->name);
-		printf("free:%p\n", ent);
-		printf("free->next:%p, ptr null:%d\n", csr, csr == NULL);
+		//printf("free:%s\n", ent->name);
 		free(ent->name);
 		free(ent->stat);
 		free(ent->path);

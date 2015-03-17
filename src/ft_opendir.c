@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 23:29:35 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/17 20:28:00 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 	indic[0] = 0;
 	indic[1] = 0;
 	entlst = NULL;
-	/*if ((dstream = opendir(arglst->name)))
+	if ((dstream = opendir(arglst->name)))
 	{
 		while ((dirent = readdir(dstream)))
 		{
@@ -138,11 +138,12 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 	}
 	else
 	{
-		printf("hello\n");
+		//printf("hello\n");
 		split = NULL;
 		indic[1] = ft_split(&split, entlst->name);
 		ft_error_prefix(split[indic[1]]);
 		free(split);
-	}*/
-	entlst ? ft_freeentlst(entlst) : 1;
+	}
+	if (entlst)
+		ft_freeentlst(entlst);
 }
