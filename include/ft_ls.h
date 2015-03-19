@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/17 20:36:49 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/19 11:53:12 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void				ft_entAdd(t_ent **entlst, t_ent *new);
 void				ft_addentlst(t_ent **entlst, char *name, struct stat *buf);
 void				ft_add_path(t_ent *ent, char *name);
 void				ft_sort_ent(t_ent **entlst);
-void				ft_open_dir(t_info *info, t_ent *entlst, char **split);
+void				ft_open_dir(t_info *info, t_ent *entlst);
 int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_info *info, t_ent *entlst);
 void				ft_run_ent(t_info *info, t_ent *entlst);

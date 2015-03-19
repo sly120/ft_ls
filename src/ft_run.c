@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/17 22:19:00 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/19 11:53:37 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 			i ? ft_putchar('\n') : 1;
 			if ((*indic)[0] > 1 && (*indic)[1])
 				ft_disp_path(entlst);
-			ft_open_dir(info, entlst, NULL);
+			ft_open_dir(info, entlst);
 			i = 1;
 		}
 		entlst = entlst->next;
@@ -209,15 +209,15 @@ int							ft_run(int argc, char **argv, int i, char *options)
 	return (0);
 }
 
-void						ft_run_ent(t_info *info, t_ent *entry)
+/*void						ft_run_ent(t_info *info, t_ent *entry)
 {
 		if (entry->type == DT_DIR)
 		{
 			//printf("entry name:%s, path:%s\n", entry->name, entry->path);
 			ft_open_dir(info, entry, NULL);
 		}
-	ft_putstr("ahoy\n");
-}
+	//ft_putstr("ahoy\n");
+}*/
 
 /*int						ft_run(int argc, char **argv, int i, char *options)
 {

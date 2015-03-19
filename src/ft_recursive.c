@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/03/15 20:57:26 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/19 11:56:25 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void				ft_recursive_ls(t_info *info, t_ent *entlst)
 			ft_putchar('\n');
 			ft_putstr(csr->path);
 			ft_putendl(":");
-			ft_run_ent(info, csr);
+			ft_open_dir(info, csr);
 		}
 		csr = csr->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/17 22:28:43 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/19 11:55:39 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ void				ft_open_dir_1(t_info *info, t_ent *entlst)
 {
 		ft_disp_ent(entlst, info->opt);
 		//printf("entLst:%s\n", entlst->name);
-		if (ft_option_check(info->opt, 'R'))
+		if (ft_option_check(info->opt, 'R') && entlst->type == DT_DIR)
 			ft_recursive_ls(info, entlst);
 }
 
-void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
+void				ft_open_dir(t_info *info, t_ent *arglst)
 {
 	/*
 	 * indic[0]: isdirent indicator
@@ -117,11 +117,12 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 	indic[0] = 0;
 	indic[1] = 0;
 	entlst = NULL;
-	if ((dstream = opendir(arglst->name)))
+	printf("arglst path:%s\n", arglst->path);
+	if ((dstream = opendir(arglst->path)))
 	{
 		while ((dirent = readdir(dstream)))
 		{
-			ft_putstr(dirent->d_name);
+			//ft_putstr(dirent->d_name);
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
 			ft_get_stat(dirent->d_name, &buf);
@@ -136,11 +137,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst, char **split)
 		closedir(dstream);
 	}
 	else
-	{
-		printf("hello\n");
-		split = NULL;
 		ft_error_prefix(arglst->name);
-	}
 	if (entlst)
 		ft_freeentlst(entlst);
 }
