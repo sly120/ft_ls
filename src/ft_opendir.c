@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/19 11:55:39 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/20 20:43:57 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 	indic[0] = 0;
 	indic[1] = 0;
 	entlst = NULL;
-	printf("arglst path:%s\n", arglst->path);
+	//printf("arglst path:%s\n", arglst->path);
 	if ((dstream = opendir(arglst->path)))
 	{
 		while ((dirent = readdir(dstream)))

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/19 11:53:37 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/20 23:39:06 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,15 @@ static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{ ft_putendl(csr->name); i = 1; }
+		{ ft_putendl(csr->name), i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)
 	{
-		if (S_ISDIR(entlst->stat->st_mode))
+		if (S_ISDIR(entlst->stat->st_mode) && (ft_option_check(info->opt, 'a')
+				|| entlst->name[0] != '.'))
 		{
+			printf("entlst name:%s\n", entlst->name);
 			i ? ft_putchar('\n') : 1;
 			if ((*indic)[0] > 1 && (*indic)[1])
 				ft_disp_path(entlst);
