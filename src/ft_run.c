@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/20 23:39:06 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/22 00:20:10 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void					ft_init_inttab(int (*inttab)[2])
 int					ft_get_stat(char *path, struct stat **buf)
 {
 	*buf = (struct stat*)malloc(sizeof(struct stat));
-	return (stat(path, *buf));
+	return (lstat(path, *buf));
 }
 
 void				ft_entAdd(t_ent **arglst, t_ent *new)
@@ -88,13 +88,6 @@ static int				ft_isoperand(t_ent **arglst, char *argv)
 {
 	struct stat			*buf;
 
-	/*ft_entAdd(arglst[0], ft_entFactory(argv[i - 1]));
-	printf("argv:%s, %p\n", argv[i - 1], arglst[0]);
-		if (ft_getStat(argv[i - 1], &((*(arglst[0]))->stat)) == -1)
-		{
-			ft_entAdd(arglst[1], *(arglst[0]));
-			arglst[0] = NULL;
-		}*/
 	if ((ft_get_stat(argv, &buf) == -1))
 	{
 		ft_error_prefix(argv);
@@ -105,26 +98,45 @@ static int				ft_isoperand(t_ent **arglst, char *argv)
 	return (0);
 }
 
-static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
+static void				print_type(mode_t m)
+{
+	S_ISREG(m) ? ft_putchar('-') : 0;
+	S_ISDIR(m) ? ft_putchar('d') : 0;
+	S_ISBLK(m) ? ft_putchar('b') : 0;
+	S_ISCHR(m) ? ft_putchar('c') : 0;
+	S_ISFIFO(m) ? (S_ISSOCK(m) ? ft_putchar('s') : ft_putchar('p')) : 0;
+	S_ISLNK(m) ? ft_putchar('l') : 0;
+}
+
+static void				print_permission(mode_t m)
+{
+	printf("ho\n");
+}
+
+static void				disp_details_l(t_ent *ent)
+{
+	print_type(ent->stat->st_mode);
+	print_permission(ent->stat->st_mode);
+}
+
+static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
 {
 	int					i;
 	t_ent				*csr;
 
 	i = 0;
-	ft_sort_ent(&entlst);
 	csr = entlst;
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{ ft_putendl(csr->name), i = 1; }
+		{ ft_option_check(info->opt, 'l') ? disp_details_l(csr) : ft_putendl(csr->name), i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)
 	{
-		if (S_ISDIR(entlst->stat->st_mode) && (ft_option_check(info->opt, 'a')
-				|| entlst->name[0] != '.'))
+		if (S_ISDIR(entlst->stat->st_mode))
 		{
-			printf("entlst name:%s\n", entlst->name);
+			//printf("entlst name:%s\n", entlst->name);
 			i ? ft_putchar('\n') : 1;
 			if ((*indic)[0] > 1 && (*indic)[1])
 				ft_disp_path(entlst);
@@ -133,7 +145,12 @@ static int				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 		}
 		entlst = entlst->next;
 	}
-	return (0);
+}
+
+static void				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
+{
+	ft_sort_ent(&entlst);
+	ft_disp_default(info, entlst, indic);
 }
 
 void					ft_freeentlst(t_ent *ent)
@@ -175,9 +192,9 @@ void					ft_run_1(t_info *info, char **argv)
 			if (!(ft_isoperand(&arglst, argv[i - 1])))
 			{
 				indic[0]++;
+				//printf("arg name:%s\n", arglst->name);
 				S_ISDIR(arglst->stat->st_mode) ? indic[1] = 1 : 1 ;
-				//printf("arglst->stat:%d, info inrec:%d\n", arglst->stat->st_mode, info->is_inrec);
-
+				printf("arglst->stat:%d\n", arglst->stat->st_mode);
 				/*if (info->pos < info->ac)
 					ft_disp_path(arglst);
 				if (i < info->ac)
@@ -210,99 +227,3 @@ int							ft_run(int argc, char **argv, int i, char *options)
 	//free
 	return (0);
 }
-
-/*void						ft_run_ent(t_info *info, t_ent *entry)
-{
-		if (entry->type == DT_DIR)
-		{
-			//printf("entry name:%s, path:%s\n", entry->name, entry->path);
-			ft_open_dir(info, entry, NULL);
-		}
-	//ft_putstr("ahoy\n");
-}*/
-
-/*int						ft_run(int argc, char **argv, int i, char *options)
-{
-	
-	 *	dirLst[0]: list of operands which are not a file nor a directory
-	 *	dirLst[1]: list of files
-	 *	dirLst[2]: list of directories
-	 *	tab[0]: count
-	 *	tab[1]: isdirLst[0] indicator
-	 *	tab[2]: isdirLst[1] indicator
-	 *	tab[3]: isdirLst[2] indicator
-	 */
-	/*t_dir				*dirLst[3];
-	int					tab[4];
-	struct stat			*dirRaw;
-	t_dir				*check;
-
-	if (argc >= tab[0])
-		while (tab[0] <= argc)
-		{
-			if (ft_getStat(argv[tab[0] - 1], &dirRaw) == -1)
-			{
-				//printf("fail to open:%s, errno:%d, tab[0]:%d, i:%d\n", argv[tab[0] - 1], errno, tab[0], i);
-				ft_dirAdd(&dirLst[0], ft_dirnew(-1, argv[tab[0] - 1]));
-				tab[1] = 1;
-			}
-			else
-			{
-				//printf("argv:%s\n", argv[tab[0] - 2]);
-				if (S_ISDIR(dirRaw->st_mode))
-				{
-					ft_dirAdd(&dirLst[2], ft_dirnew(dirRaw->st_mode, argv[tab[0] - 1]));
-				tab[3] = 1;
-				//printf("Directory test:%d, mode value:%d, dirRaw->mode:%d, operand name:%s, tab[0]:%d, i:%d, ifdir:%d\n", tab[0] - 1, dirLst[2]->mode, dirRaw->st_mode, dirLst[2]->name, tab[0], i, S_IFDIR);
-				}
-				else
-				{
-					ft_dirAdd(&dirLst[1], ft_dirnew(dirRaw->st_mode, argv[tab[0] - 1]));
-				tab[2] = 1;
-				//printf("second Directory test:%d, mode value:%d, operand name:%s, tab[0]:%d, i:%d, ifdir:%d\n", tab[0] - 1, dirLst[1]->mode, dirLst[1]->name, tab[0], i, S_IFDIR);
-				}
-				//int i = ((dirLst[1]->mode) & (1 << 14)) > 0;
-			}
-			tab[0]++;
-				//printf("Directory test:%d, mode value:%d,  operand name:%s\n", tab[0] - 2, dirLst[1]->next->mode, dirLst[1]->next->name);
-		}
-	else
-	{
-		//ft_putendl(".");
-		ft_getStat(".", &dirRaw);
-		ft_dirAdd(&dirLst[2], ft_dirnew(dirRaw->st_mode, "."));
-		//printf(".->mode:%d\n", dirLst[1]->mode);
-		tab[3] = 1;
-	}
-	if (tab[1] == 1)
-	{
-		check = dirLst[0];
-		while (check)
-		{
-			printf("check: %s\n", check->name);
-			check = check->next;
-		}*/
-		/*ft_sort_dir(&dirLst[0]);
-		check = dirLst[0];
-		while (check)
-		{
-			errno = 2;
-			ft_putstr("ls: ");
-			perror(check->name);
-			check = check->next;
-		}
-		free(dirLst[0]);
-	}
-	if (tab[2] == 1)
-	{
-		ft_sort_dir(&dirLst[1]);
-		free(dirLst[1]);
-	}
-	if (tab[3] == 1)
-	{
-		ft_sort_dir(&dirLst[2]);
-		ft_openDirecto(&dirLst[2], options, NULL);
-		free(dirLst[2]);
-	}
-	return (0);
-}*/

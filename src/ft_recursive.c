@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/10 20:59:25 by sly               #+#    #+#             */
-/*   Updated: 2015/03/21 00:05:32 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/22 00:20:15 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void				ft_recursive_ls(t_info *info, t_ent *entlst)
 			printf(", strcmp .:%d", ft_strcmp(csr->name, "."));
 			printf(", strcmp ..:%d\n", ft_strcmp(csr->name, ".."));*/
 		//if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, ".."))
-		if (csr->type == DT_DIR && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, "..") && (ft_option_check(info->opt, 'a') || csr->name[0] != '.'))
+		if ((csr->type == DT_DIR || (!csr->type && !ft_strcmp(csr->name, "fd"))) && ft_strcmp(csr->name, ".") && ft_strcmp(csr->name, "..") && (ft_option_check(info->opt, 'a') || csr->name[0] != '.'))
 		{
 			ft_add_path(csr, csr->name);
 			ft_putchar('\n');
