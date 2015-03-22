@@ -6,18 +6,41 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/22 00:20:26 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/22 23:53:47 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_ls.h>
 
+static char			*ft_endpath(char *path)
+{
+	char			*s;
+	int				i;
+
+	i = ft_strlen(path);
+	s = path + i;
+	while (*s != '/' && i-- >= 0)
+		s--;
+	return (++s);
+}
+
 void				ft_disp_ent(t_ent *entlst, char *options)
 {
+	int				max;
+
+	max = ft_maxlink(entlst);
 	while (entlst)
 	{
 		if (ft_option_check(options, 'a') || (entlst->name)[0] != '.')
-			ft_putendl(entlst->name);
+		{
+			if (ft_option_check(options, 'l'))
+			{
+				disp_details_l(entlst, max);
+				ft_putchar('\n');
+			}
+			else
+				ft_putendl(entlst->name);
+		}
 		entlst = entlst->next;
 	}
 }
@@ -66,7 +89,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 		closedir(dstream);
 	}
 	else
-		ft_error_prefix(arglst->name);
+		ft_error_prefix(ft_endpath(arglst->name));
 	if (entlst)
 		ft_freeentlst(entlst);
 }

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/22 00:20:10 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/23 00:32:17 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,85 @@ static void				print_type(mode_t m)
 
 static void				print_permission(mode_t m)
 {
-	printf("ho\n");
+	int					i;
+	int					mask;
+
+	i = -1;
+	mask = 256;
+	while (++i < 9)
+	{
+		if (i % 3 == 0)
+			m & mask ? ft_putchar('r') : ft_putchar('-');
+		if (i % 3 == 1)
+			m & mask ? ft_putchar('w') : ft_putchar('-');
+		if (i % 3 == 2)
+			m & mask ? ft_putchar('x') : ft_putchar('-');
+		mask = mask >> 1;
+	}
+	ft_putchar(' ');
 }
 
-static void				disp_details_l(t_ent *ent)
+int						ft_maxlink(t_ent *ent)
+{
+	int					tmp;
+	int					max;
+
+	max = 0;
+	while (ent)
+	{
+		tmp = (int)ent->stat->st_nlink;
+		if (tmp > max)
+			max = tmp;
+		ent = ent->next;
+	}
+	//printf("max:%d\n", max);
+	return (max);
+}
+
+static void				print_space(int max, int i)
+{
+	int					digits;
+	int					maxdigits;
+
+	maxdigits = 0;
+	digits = 0;
+	while (max)
+	{
+		max /= 10;
+		maxdigits++;
+	}
+	while (i)
+	{
+		i /= 10;
+		digits++;
+	}
+	while (digits++ < maxdigits)
+		ft_putchar(' ');
+}
+
+static void				print_user(uid_t uid)
+{
+	struct passwd		*pwd;
+	int					tmp;
+
+	tmp = errno;
+	errno = 0;
+	ft_putchar(' ');
+	if (!(pwd = getpwuid(uid)))
+		strerror(errno);
+	else
+		ft_putstr(pwd->pw_uid);
+	errno = tmp;
+}
+
+void					disp_details_l(t_ent *ent, int max)
 {
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode);
+	print_space(max, ent->stat->st_nlink);
+	ft_putchar(' ');
+	ft_putnbr(ent->stat->st_nlink);
+	print_user(ent->stat->st_uid);
 }
 
 static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
@@ -129,7 +201,7 @@ static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{ ft_option_check(info->opt, 'l') ? disp_details_l(csr) : ft_putendl(csr->name), i = 1; }
+		{ ft_option_check(info->opt, 'l') ? disp_details_l(csr, ft_maxlink(csr)) : ft_putendl(csr->name), i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)
@@ -194,7 +266,7 @@ void					ft_run_1(t_info *info, char **argv)
 				indic[0]++;
 				//printf("arg name:%s\n", arglst->name);
 				S_ISDIR(arglst->stat->st_mode) ? indic[1] = 1 : 1 ;
-				printf("arglst->stat:%d\n", arglst->stat->st_mode);
+				//printf("arglst->stat:%d\n", arglst->stat->st_mode);
 				/*if (info->pos < info->ac)
 					ft_disp_path(arglst);
 				if (i < info->ac)

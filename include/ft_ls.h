@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/21 23:18:46 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/23 00:31:34 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include <sys/stat.h>
 #include <sys/errno.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <uuid/uuid.h>
 
 typedef struct		s_ent
 {
@@ -50,6 +53,8 @@ void				ft_open_dir(t_info *info, t_ent *entlst);
 int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_info *info, t_ent *entlst);
 void				ft_run_ent(t_info *info, t_ent *entlst);
+int					ft_maxlink(t_ent *ent);
+void				disp_details_l(t_ent *ent, int max);
 void				ft_error_prefix(char *s);
 void				ft_freeentlst(t_ent *ent);
 #	endif
