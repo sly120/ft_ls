@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/23 00:32:17 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/24 00:32:26 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void					ft_init_info(t_info *info, int argc, int i)
 {
 	info->ac = argc;
 	info->pos = i;
+	info->maxlink = 0;
+	info->maxusername = 0;
 }
 
 void					ft_init_inttab(int (*inttab)[2])
@@ -128,24 +130,53 @@ static void				print_permission(mode_t m)
 	ft_putchar(' ');
 }
 
-int						ft_maxlink(t_ent *ent)
+static int				ft_maxlink(t_ent *entlst)
 {
 	int					tmp;
 	int					max;
 
 	max = 0;
-	while (ent)
+	while (entlst)
 	{
-		tmp = (int)ent->stat->st_nlink;
+		tmp = (int)entlst->stat->st_nlink;
 		if (tmp > max)
 			max = tmp;
-		ent = ent->next;
+		entlst = entlst->next;
 	}
 	//printf("max:%d\n", max);
 	return (max);
 }
 
-static void				print_space(int max, int i)
+static int				ft_maxusername(t_ent *entlst)
+{
+	struct passwd		*pwd;
+	int					max;
+	int					err;
+
+	err = errno;
+	errno = 0;
+	max = 0;
+	while (entlst)
+	{
+		if (!(pwd = getpwuid(entlst->stat->st_uid)))
+			strerror(errno);
+		if (ft_strlen(pwd->pw_name) > max)
+			max = ft_strlen(pwd->pw_name);
+		//printf("entlst name:%s, pwd->name:%s, next name:%s\n", entlst->name, pwd->pw_name, entlst->next->name);
+		entlst = entlst->next;
+	}
+	errno = err;
+	//printf("max:%d\n", max);
+	return (max);
+}
+
+void					getentinfo(t_info *info, t_ent *entlst)
+{
+	info->maxlink = ft_maxlink(entlst);
+	info->maxusername = ft_maxusername(entlst);
+}
+
+static void				align_right(int max, int i)
 {
 	int					digits;
 	int					maxdigits;
@@ -166,10 +197,11 @@ static void				print_space(int max, int i)
 		ft_putchar(' ');
 }
 
-static void				print_user(uid_t uid)
+static void				print_user(uid_t uid, int max)
 {
 	struct passwd		*pwd;
 	int					tmp;
+	int					i;
 
 	tmp = errno;
 	errno = 0;
@@ -177,18 +209,23 @@ static void				print_user(uid_t uid)
 	if (!(pwd = getpwuid(uid)))
 		strerror(errno);
 	else
-		ft_putstr(pwd->pw_uid);
+		ft_putstr(pwd->pw_name);
+	i = ft_strlen(pwd->pw_name);
+	while (i++ <= max)
+		ft_putchar(' ');
+	ft_putchar(' ');
+	ft_putchar(' ');
 	errno = tmp;
 }
 
-void					disp_details_l(t_ent *ent, int max)
+void					disp_details_l(t_info *info, t_ent *ent)
 {
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode);
-	print_space(max, ent->stat->st_nlink);
+	/*align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putchar(' ');
 	ft_putnbr(ent->stat->st_nlink);
-	print_user(ent->stat->st_uid);
+	print_user(ent->stat->st_uid, info->maxusername);*/
 }
 
 static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
@@ -198,10 +235,12 @@ static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
 
 	i = 0;
 	csr = entlst;
+	getentinfo(info, entlst);
+	printf("maxlink:%d, maxusername:%d\n", info->maxlink, info->maxusername);
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{ ft_option_check(info->opt, 'l') ? disp_details_l(csr, ft_maxlink(csr)) : ft_putendl(csr->name), i = 1; }
+		{ ft_option_check(info->opt, 'l') ? disp_details_l(info, csr) : ft_putendl(csr->name), i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)

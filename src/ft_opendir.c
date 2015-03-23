@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/22 23:53:47 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/24 00:17:16 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,17 @@ static char			*ft_endpath(char *path)
 	return (++s);
 }
 
-void				ft_disp_ent(t_ent *entlst, char *options)
+void				ft_disp_ent(t_info *info, t_ent *entlst)
 {
-	int				max;
-
-	max = ft_maxlink(entlst);
+	getentinfo(info, entlst);
+	printf("in dir maxlink:%d, maxusername:%d\n", info->maxlink, info->maxusername);
 	while (entlst)
 	{
-		if (ft_option_check(options, 'a') || (entlst->name)[0] != '.')
+		if (ft_option_check(info->opt, 'a') || (entlst->name)[0] != '.')
 		{
-			if (ft_option_check(options, 'l'))
+			if (ft_option_check(info->opt, 'l'))
 			{
-				disp_details_l(entlst, max);
+				disp_details_l(info, entlst);
 				ft_putchar('\n');
 			}
 			else
@@ -47,7 +46,7 @@ void				ft_disp_ent(t_ent *entlst, char *options)
 
 void				ft_open_dir_1(t_info *info, t_ent *entlst)
 {
-		ft_disp_ent(entlst, info->opt);
+		ft_disp_ent(info, entlst);
 		//printf("entLst:%s\n", entlst->name);
 		if (ft_option_check(info->opt, 'R'))
 			ft_recursive_ls(info, entlst);
