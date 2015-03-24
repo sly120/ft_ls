@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/24 00:34:03 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/24 21:14:08 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_info *info, t_ent *entlst);
 void				ft_run_ent(t_info *info, t_ent *entlst);
 void				getentinfo(t_info *info, t_ent *entlst);
-void				disp_details_l(t_info *info, t_ent *ent);
+void				disp_details_l(t_ent *ent, int max);
 void				ft_error_prefix(char *s);
 void				ft_freeentlst(t_ent *ent);
 #	endif

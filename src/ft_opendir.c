@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/03/24 00:17:16 by sly              ###   ########.fr       */
+/*   Updated: 2015/03/24 21:14:03 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,29 @@ static char			*ft_endpath(char *path)
 	return (++s);
 }
 
+static char			*ft_entpath(char *argpath, char *name)
+{
+	char			*tmp;
+	char			*dst;
+
+	tmp = ft_strjoin(argpath, "/");
+	dst = ft_strjoin(tmp, name);
+	free(tmp);
+	return (dst);
+}
+
 void				ft_disp_ent(t_info *info, t_ent *entlst)
 {
+	int				max;
+
 	getentinfo(info, entlst);
-	printf("in dir maxlink:%d, maxusername:%d\n", info->maxlink, info->maxusername);
 	while (entlst)
 	{
 		if (ft_option_check(info->opt, 'a') || (entlst->name)[0] != '.')
 		{
 			if (ft_option_check(info->opt, 'l'))
 			{
-				disp_details_l(info, entlst);
+				disp_details_l(entlst, info->maxlink);
 				ft_putchar('\n');
 			}
 			else
@@ -63,6 +75,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 	struct dirent	*dirent;
 	t_ent			*entlst;
 	struct stat		*buf;
+	char			*entpath;
 
 	indic[0] = 0;
 	indic[1] = 0;
@@ -76,12 +89,15 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 			//ft_putstr(dirent->d_name);
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
+			//entpath = ft_entpath(arglst->path, dirent->d_name);
 			ft_get_stat(dirent->d_name, &buf);
+			//free(entpath);
 			ft_addentlst(&entlst, dirent->d_name, buf);
 			entlst->type = dirent->d_type;
 			entlst->path = ft_strdup(arglst->path);
 			//printf("name:%s, dir:%u, stat:%d, path:%s\n", entlst->name, entlst->type == DT_DIR, S_ISDIR(entlst->stat->st_mode), entlst->path);
 			indic[0] = 1;
+	printf("ent:%s, mode:%d, path:%s\n", entlst->name, entlst->stat->st_mode, entlst->path);
 		}
 		ft_sort_ent(&entlst);
 		ft_open_dir_1(info, entlst);
