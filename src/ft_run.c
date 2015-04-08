@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/03/24 21:14:06 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/09 00:36:40 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static void				print_permission(mode_t m)
 	ft_putchar(' ');
 }
 
-int						ft_maxlink(t_ent *ent)
+static int				ft_maxlink(t_ent *ent)
 {
 	int					tmp;
 	int					max;
@@ -148,9 +148,36 @@ int						ft_maxlink(t_ent *ent)
 	return (max);
 }
 
+static int				ft_maxusername(t_ent *entlst)
+{
+	struct passwd		*pwd;
+	int					tmp;
+	int					max;
+	int					err;
+
+	max = 0;
+	while (entlst)
+	{
+		err = errno;
+		errno = 0;
+		if (!(pwd = getpwuid(entlst->stat->st_uid)))
+			strerror(errno);
+		else
+		{
+			tmp = ft_strlen(pwd->pw_name);
+			if (tmp > max)
+				max = tmp;
+		}
+		entlst = entlst->next;
+	}
+	printf("max:%d\n", max);
+	return (max);
+}
+
 void					getentinfo(t_info *info, t_ent *entlst)
 {
 	info->maxlink = ft_maxlink(entlst);
+	info->maxusername = ft_maxusername(entlst);
 }
 
 static void				align_right_spaces(int max, int i)
@@ -191,7 +218,7 @@ static void				print_user(uid_t uid)
 
 void					disp_details_l(t_ent *ent, int max)
 {
-	printf("ent:%s, mode:%d\n", ent->name, ent->stat->st_mode);
+	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode);
 	align_right_spaces(max, ent->stat->st_nlink);
@@ -260,10 +287,10 @@ static void				ft_disp_lformat(t_info *info, t_ent *entlst, int (*indic)[2])
 static void				ft_disp(t_info *info, t_ent *entlst, int (*indic)[2])
 {
 	ft_sort_ent(&entlst);
-	/*if (ft_option_check(info->opt, 'l'))
+	if (ft_option_check(info->opt, 'l'))
 		ft_disp_lformat(info, entlst, indic);
 	else
-	*/	ft_disp_default(info, entlst, indic);
+		ft_disp_default(info, entlst, indic);
 }
 
 void					ft_freeentlst(t_ent *ent)
