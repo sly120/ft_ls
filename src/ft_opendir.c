@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/04/09 00:36:28 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/09 22:15:34 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void				ft_disp_ent(t_info *info, t_ent *entlst)
 		{
 			if (ft_option_check(info->opt, 'l'))
 			{
-				disp_details_l(entlst, info->maxlink);
+				disp_details_l(info, entlst);
 				ft_putchar('\n');
 			}
 			else
@@ -89,8 +89,8 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 			//ft_putstr(dirent->d_name);
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
-			//entpath = ft_entpath(arglst->path, dirent->d_name);
-			ft_get_stat(dirent->d_name, &buf);
+			entpath = ft_entpath(arglst->path, dirent->d_name);
+			ft_get_stat(entpath, &buf);
 			//free(entpath);
 			ft_addentlst(&entlst, dirent->d_name, buf);
 			entlst->type = dirent->d_type;

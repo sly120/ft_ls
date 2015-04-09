@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/09 00:36:40 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/10 00:20:41 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ static int				ft_maxusername(t_ent *entlst)
 		}
 		entlst = entlst->next;
 	}
-	printf("max:%d\n", max);
+	//printf("max:%d\n", max);
 	return (max);
 }
 
@@ -180,7 +180,7 @@ void					getentinfo(t_info *info, t_ent *entlst)
 	info->maxusername = ft_maxusername(entlst);
 }
 
-static void				align_right_spaces(int max, int i)
+static void				spaces_to_align_right(int max, int i)
 {
 	int					digits;
 	int					maxdigits;
@@ -201,7 +201,16 @@ static void				align_right_spaces(int max, int i)
 		ft_putchar(' ');
 }
 
-static void				print_user(uid_t uid)
+static void				spaces_to_align_left(int max, char *s)
+{
+	int					i;
+
+	i = ft_strlen(s);
+	while (i++ < max)
+		ft_putchar(' ');
+}
+
+static char				*print_user(uid_t uid)
 {
 	struct passwd		*pwd;
 	int					tmp;
@@ -210,21 +219,29 @@ static void				print_user(uid_t uid)
 	errno = 0;
 	ft_putchar(' ');
 	if (!(pwd = getpwuid(uid)))
+	{
 		strerror(errno);
+		return (NULL);
+	}
 	else
 		ft_putstr(pwd->pw_name);
 	errno = tmp;
+	return (ft_strdup(pwd->pw_name));
 }
 
-void					disp_details_l(t_ent *ent, int max)
+void					disp_details_l(t_info *info, t_ent *ent)
 {
+	char				*tmp;
+
 	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode);
-	align_right_spaces(max, ent->stat->st_nlink);
+	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putchar(' ');
 	ft_putnbr(ent->stat->st_nlink);
-	print_user(ent->stat->st_uid);
+	tmp = print_user(ent->stat->st_uid);
+	spaces_to_align_left(info->maxusername, tmp);
+	free(tmp);
 }
 
 static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
@@ -266,7 +283,7 @@ static void				ft_disp_lformat(t_info *info, t_ent *entlst, int (*indic)[2])
 	while (csr)
 	{
 		if (!S_ISDIR(csr->stat->st_mode))
-		{ disp_details_l(csr, info->maxlink), i = 1; }
+		{ disp_details_l(info, csr), i = 1; }
 		csr = csr->next;
 	}
 	while (entlst)
