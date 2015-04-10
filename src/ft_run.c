@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/10 00:20:41 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/11 00:19:56 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ static void				print_permission(mode_t m)
 			m & mask ? ft_putchar('x') : ft_putchar('-');
 		mask = mask >> 1;
 	}
-	ft_putchar(' ');
 }
 
 static int				ft_maxlink(t_ent *ent)
@@ -153,13 +152,10 @@ static int				ft_maxusername(t_ent *entlst)
 	struct passwd		*pwd;
 	int					tmp;
 	int					max;
-	int					err;
 
 	max = 0;
 	while (entlst)
 	{
-		err = errno;
-		errno = 0;
 		if (!(pwd = getpwuid(entlst->stat->st_uid)))
 			strerror(errno);
 		else
@@ -174,10 +170,33 @@ static int				ft_maxusername(t_ent *entlst)
 	return (max);
 }
 
+static int				ft_maxgroup(t_ent *entlst)
+{
+	struct group		*gr;
+	int					tmp;
+	int					max;
+
+	max = 0;
+	while (entlst)
+	{
+		if (!(gr = getgrgid(entlst->stat->st_gid)))
+			strerror(errno);
+		else
+		{
+			tmp = ft_strlen(gr->gr_name);
+			if (tmp > max)
+				max = tmp;
+		}
+		entlst = entlst->next;
+	}
+	return (max);
+}
+
 void					getentinfo(t_info *info, t_ent *entlst)
 {
 	info->maxlink = ft_maxlink(entlst);
 	info->maxusername = ft_maxusername(entlst);
+	info->maxgroup = ft_maxgroup(entlst);
 }
 
 static void				spaces_to_align_right(int max, int i)
@@ -208,25 +227,31 @@ static void				spaces_to_align_left(int max, char *s)
 	i = ft_strlen(s);
 	while (i++ < max)
 		ft_putchar(' ');
+	ft_putchar(' ');
 }
 
 static char				*print_user(uid_t uid)
 {
 	struct passwd		*pwd;
-	int					tmp;
 
-	tmp = errno;
-	errno = 0;
 	ft_putchar(' ');
 	if (!(pwd = getpwuid(uid)))
-	{
-		strerror(errno);
 		return (NULL);
-	}
 	else
 		ft_putstr(pwd->pw_name);
-	errno = tmp;
-	return (ft_strdup(pwd->pw_name));
+	return (pwd->pw_name);
+}
+
+static char				*print_group(gid_t gid)
+{
+	struct group		*group;
+
+	ft_putchar(' ');
+	if (!(group = getgrgid(gid)))
+		return (NULL);
+	else
+		ft_putstr(group->gr_name);
+	return (group->gr_name);
 }
 
 void					disp_details_l(t_info *info, t_ent *ent)
@@ -236,12 +261,15 @@ void					disp_details_l(t_info *info, t_ent *ent)
 	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode);
+	if (ft_strcmp(ent->path, "/dev"))
+		ft_putchar(' ');
 	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putchar(' ');
 	ft_putnbr(ent->stat->st_nlink);
-	tmp = print_user(ent->stat->st_uid);
-	spaces_to_align_left(info->maxusername, tmp);
-	free(tmp);
+	if ((tmp = print_user(ent->stat->st_uid)))
+		spaces_to_align_left(info->maxusername, tmp);
+	if ((tmp = print_group(ent->stat->st_gid)))
+		spaces_to_align_left(info->maxgroup, tmp);
 }
 
 static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])

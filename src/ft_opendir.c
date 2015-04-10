@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/04/09 22:15:34 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/10 23:35:06 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 			entlst->path = ft_strdup(arglst->path);
 			//printf("name:%s, dir:%u, stat:%d, path:%s\n", entlst->name, entlst->type == DT_DIR, S_ISDIR(entlst->stat->st_mode), entlst->path);
 			indic[0] = 1;
-	printf("ent:%s, mode:%d, path:%s\n", entlst->name, entlst->stat->st_mode, entlst->path);
+	//printf("ent:%s, mode:%d, path:%s\n", entlst->name, entlst->stat->st_mode, entlst->path);
 		}
 		ft_sort_ent(&entlst);
 		ft_open_dir_1(info, entlst);
