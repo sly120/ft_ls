@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/11 00:19:56 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/11 18:22:31 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,18 +152,25 @@ static int				ft_maxusername(t_ent *entlst)
 	struct passwd		*pwd;
 	int					tmp;
 	int					max;
+	int					uid;
 
 	max = 0;
 	while (entlst)
 	{
 		if (!(pwd = getpwuid(entlst->stat->st_uid)))
-			strerror(errno);
-		else
 		{
-			tmp = ft_strlen(pwd->pw_name);
-			if (tmp > max)
-				max = tmp;
+			tmp = 0;
+			uid = (int)entlst->stat->st_uid;
+			while (uid)
+			{
+				uid /= 10;
+				tmp++;
+			}
 		}
+		else
+			tmp = ft_strlen(pwd->pw_name);
+		if (tmp > max)
+			max = tmp;
 		entlst = entlst->next;
 	}
 	//printf("max:%d\n", max);
@@ -175,21 +182,76 @@ static int				ft_maxgroup(t_ent *entlst)
 	struct group		*gr;
 	int					tmp;
 	int					max;
+	int					gid;
 
 	max = 0;
 	while (entlst)
 	{
 		if (!(gr = getgrgid(entlst->stat->st_gid)))
-			strerror(errno);
-		else
 		{
-			tmp = ft_strlen(gr->gr_name);
-			if (tmp > max)
-				max = tmp;
+			tmp = 0;
+			gid = (int)entlst->stat->st_gid;
+			while (gid)
+			{
+				gid /= 10;
+				tmp++;
+			}
 		}
+		else
+			tmp = ft_strlen(gr->gr_name);
+		if (tmp > max)
+			max = tmp;
 		entlst = entlst->next;
 	}
 	return (max);
+}
+
+static int				ft_isspecial(t_ent *entlst)
+{
+	while (entlst)
+	{
+		if (S_ISCHR(entlst->stat->st_mode) || S_ISBLK(entlst->stat->st_mode))
+			return (1);
+		entlst = entlst->next;
+	}
+	return (0);
+}
+
+static int				ft_getmaxspecialsub(t_ent *entlst, int mask)
+{
+	int					max;
+
+	max = 0;
+	while (entlst)
+	{
+		if ((entlst->stat->st_dev & mask) > max)
+			max = entlst->stat->st_dev & mask;
+		entlst = entlst->next;
+	}
+	return (max);
+}
+
+static void				ft_getmaxspecial(t_info *info, t_ent *entlst)
+{
+	int					max;
+	int					digits;
+
+	max = ft_getmaxspecialsub(entlst, 65280);;
+	digits = 0;
+	while (max)
+	{
+		max /= 10;
+		digits++;
+	}
+	info->maxmajor = digits;
+	max = ft_getmaxspecialsub(entlst, 255);
+	digits = 0;
+	while (max)
+	{
+		max /= 10;
+		digits++;
+	}
+	info->maxminor = digits;
 }
 
 void					getentinfo(t_info *info, t_ent *entlst)
@@ -197,6 +259,8 @@ void					getentinfo(t_info *info, t_ent *entlst)
 	info->maxlink = ft_maxlink(entlst);
 	info->maxusername = ft_maxusername(entlst);
 	info->maxgroup = ft_maxgroup(entlst);
+	if ((info->special = ft_isspecial(entlst)))
+		ft_getmaxspecial(info, entlst);
 }
 
 static void				spaces_to_align_right(int max, int i)
@@ -230,6 +294,20 @@ static void				spaces_to_align_left(int max, char *s)
 	ft_putchar(' ');
 }
 
+static void				spaces_to_align_left_nbr(int max, int nbr)
+{
+	int					digits;
+
+	digits = 0;
+	while (nbr)
+	{
+		nbr /= 10;
+		digits++;
+	}
+	while (digits++ < max)
+		ft_putchar(' ');
+}
+
 static char				*print_user(uid_t uid)
 {
 	struct passwd		*pwd;
@@ -254,6 +332,15 @@ static char				*print_group(gid_t gid)
 	return (group->gr_name);
 }
 
+static void				disp_details_l_part2(t_info *info, t_ent *ent)
+{
+	if (info->special)
+		ft_disp_majorminor(ent);
+	else
+		ft_disp_size(ent);
+	return ;
+}
+
 void					disp_details_l(t_info *info, t_ent *ent)
 {
 	char				*tmp;
@@ -268,8 +355,19 @@ void					disp_details_l(t_info *info, t_ent *ent)
 	ft_putnbr(ent->stat->st_nlink);
 	if ((tmp = print_user(ent->stat->st_uid)))
 		spaces_to_align_left(info->maxusername, tmp);
+	else
+	{
+		ft_putnbr((int)ent->stat->st_uid);
+		spaces_to_align_left(info->maxusername, tmp);
+	}
 	if ((tmp = print_group(ent->stat->st_gid)))
 		spaces_to_align_left(info->maxgroup, tmp);
+	else
+	{
+		ft_putnbr((int)ent->stat->st_uid);
+		spaces_to_align_left(info->maxusername, tmp);
+	}
+	disp_details_l_part2(info, ent);
 }
 
 static void				ft_disp_default(t_info *info, t_ent *entlst, int (*indic)[2])
