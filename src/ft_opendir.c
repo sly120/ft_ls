@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/04/11 16:46:20 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/12 17:22:03 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ void				ft_disp_ent(t_info *info, t_ent *entlst)
 		if (ft_option_check(info->opt, 'a') || (entlst->name)[0] != '.')
 		{
 			if (ft_option_check(info->opt, 'l'))
-			{
 				disp_details_l(info, entlst);
-				ft_putchar('\n');
-			}
 			else
 				ft_putendl(entlst->name);
 		}

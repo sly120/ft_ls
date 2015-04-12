@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/11 16:46:24 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/12 16:55:09 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct		s_info
 	int				maxlink;
 	int				maxusername;
 	int				maxgroup;
+	int				maxsize;
 	int				special;
 	int				maxminor;
 	int				maxmajor;

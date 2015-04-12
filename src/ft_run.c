@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/11 18:22:31 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/12 20:34:20 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,41 +217,43 @@ static int				ft_isspecial(t_ent *entlst)
 	return (0);
 }
 
-static int				ft_getmaxspecialsub(t_ent *entlst, int mask)
+static void				ft_getmaxspecial(t_info *info, t_ent *entlst)
+{
+	t_ent				*csr;
+	int					max;
+
+	csr = entlst;
+	max = 0;
+	while (csr)
+	{
+		if (major(csr->stat->st_rdev) > max)
+			max = major(csr->stat->st_rdev);
+		csr = csr->next;
+	}
+	//printf("maxmajor:%d\n", max);
+	info->maxmajor = max;
+	max = 0;
+	while (entlst)
+	{
+		if (minor(entlst->stat->st_rdev) > max)
+			max = minor(entlst->stat->st_rdev);
+		entlst = entlst->next;
+	}
+	info->maxminor = max;
+}
+
+static int				ft_maxsize(t_ent *entlst)
 {
 	int					max;
 
 	max = 0;
 	while (entlst)
 	{
-		if ((entlst->stat->st_dev & mask) > max)
-			max = entlst->stat->st_dev & mask;
+		if ((int)entlst->stat->st_size > max)
+			max = (int)entlst->stat->st_size;
 		entlst = entlst->next;
 	}
 	return (max);
-}
-
-static void				ft_getmaxspecial(t_info *info, t_ent *entlst)
-{
-	int					max;
-	int					digits;
-
-	max = ft_getmaxspecialsub(entlst, 65280);;
-	digits = 0;
-	while (max)
-	{
-		max /= 10;
-		digits++;
-	}
-	info->maxmajor = digits;
-	max = ft_getmaxspecialsub(entlst, 255);
-	digits = 0;
-	while (max)
-	{
-		max /= 10;
-		digits++;
-	}
-	info->maxminor = digits;
 }
 
 void					getentinfo(t_info *info, t_ent *entlst)
@@ -261,6 +263,8 @@ void					getentinfo(t_info *info, t_ent *entlst)
 	info->maxgroup = ft_maxgroup(entlst);
 	if ((info->special = ft_isspecial(entlst)))
 		ft_getmaxspecial(info, entlst);
+	else
+		info->maxsize = ft_maxsize(entlst);
 }
 
 static void				spaces_to_align_right(int max, int i)
@@ -332,13 +336,37 @@ static char				*print_group(gid_t gid)
 	return (group->gr_name);
 }
 
+static void				ft_disp_size(t_info *info, t_ent *ent)
+{
+	ft_putchar(' ');
+	spaces_to_align_right(info->maxsize, (int)ent->stat->st_size);
+	ft_putnbr((int)ent->stat->st_size);
+}
+
+static void				ft_disp_device(t_info *info, t_ent *ent)
+{
+	ft_putchar(' ');
+	ft_putchar(' ');
+	if (info->special)
+	{
+		printf("%d, major:%d, minor:%d\n", ent->stat->st_rdev, major(ent->stat->st_rdev), minor(ent->stat->st_rdev));
+		spaces_to_align_right(info->maxmajor, major(ent->stat->st_rdev));
+		ft_putnbr(major(ent->stat->st_rdev));
+		ft_putstr(", ");
+		spaces_to_align_right(info->maxminor, minor(ent->stat->st_rdev));
+		ft_putnbr(minor(ent->stat->st_rdev));
+	}
+	else
+		return ;
+}
+
 static void				disp_details_l_part2(t_info *info, t_ent *ent)
 {
 	if (info->special)
-		ft_disp_majorminor(ent);
+		ft_disp_device(info, ent);
 	else
-		ft_disp_size(ent);
-	return ;
+		ft_disp_size(info, ent);
+	ft_putchar('\n');
 }
 
 void					disp_details_l(t_info *info, t_ent *ent)
@@ -350,8 +378,8 @@ void					disp_details_l(t_info *info, t_ent *ent)
 	print_permission(ent->stat->st_mode);
 	if (ft_strcmp(ent->path, "/dev"))
 		ft_putchar(' ');
-	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putchar(' ');
+	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putnbr(ent->stat->st_nlink);
 	if ((tmp = print_user(ent->stat->st_uid)))
 		spaces_to_align_left(info->maxusername, tmp);
