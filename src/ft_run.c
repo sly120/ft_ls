@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/12 20:34:20 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/13 22:27:48 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,21 @@ static void				ft_disp_path(t_ent *ent)
 {
 	ft_putstr(ent->path);
 	ft_putendl(":");
+}
+
+static int				ft_calc_digits(int i)
+{
+	int					digits;
+
+	digits = 0;
+	if (!i)
+		digits++;
+	while (i)
+	{
+		i /= 10;
+		digits++;
+	}
+	return (digits);
 }
 
 void					ft_addentlst(t_ent **elst, char *name, struct stat *buf)
@@ -158,15 +173,7 @@ static int				ft_maxusername(t_ent *entlst)
 	while (entlst)
 	{
 		if (!(pwd = getpwuid(entlst->stat->st_uid)))
-		{
-			tmp = 0;
-			uid = (int)entlst->stat->st_uid;
-			while (uid)
-			{
-				uid /= 10;
-				tmp++;
-			}
-		}
+			tmp = ft_calc_digits((int)entlst->stat->st_uid);
 		else
 			tmp = ft_strlen(pwd->pw_name);
 		if (tmp > max)
@@ -188,15 +195,7 @@ static int				ft_maxgroup(t_ent *entlst)
 	while (entlst)
 	{
 		if (!(gr = getgrgid(entlst->stat->st_gid)))
-		{
-			tmp = 0;
-			gid = (int)entlst->stat->st_gid;
-			while (gid)
-			{
-				gid /= 10;
-				tmp++;
-			}
-		}
+			tmp = ft_calc_digits((int)entlst->stat->st_gid);
 		else
 			tmp = ft_strlen(gr->gr_name);
 		if (tmp > max)
@@ -272,18 +271,8 @@ static void				spaces_to_align_right(int max, int i)
 	int					digits;
 	int					maxdigits;
 
-	maxdigits = 0;
-	digits = 0;
-	while (max)
-	{
-		max /= 10;
-		maxdigits++;
-	}
-	while (i)
-	{
-		i /= 10;
-		digits++;
-	}
+	maxdigits = ft_calc_digits(max);
+	digits = ft_calc_digits(i);
 	while (digits++ < maxdigits)
 		ft_putchar(' ');
 }
@@ -302,12 +291,7 @@ static void				spaces_to_align_left_nbr(int max, int nbr)
 {
 	int					digits;
 
-	digits = 0;
-	while (nbr)
-	{
-		nbr /= 10;
-		digits++;
-	}
+	digits = ft_calc_digits(nbr);
 	while (digits++ < max)
 		ft_putchar(' ');
 }
@@ -343,13 +327,24 @@ static void				ft_disp_size(t_info *info, t_ent *ent)
 	ft_putnbr((int)ent->stat->st_size);
 }
 
+static int				ft_calc_total_spaces_when_device(t_info *info)
+{
+	int					digits;
+
+	digits = ft_calc_digits(info->maxmajor);
+	digits += ft_calc_digits(info->maxminor);
+	return (digits + 2);
+}
+
 static void				ft_disp_device(t_info *info, t_ent *ent)
 {
+	int					spaces;
+
 	ft_putchar(' ');
 	ft_putchar(' ');
-	if (info->special)
+	if (S_ISCHR(ent->stat->st_mode) || S_ISBLK(ent->stat->st_mode))
 	{
-		printf("%d, major:%d, minor:%d\n", ent->stat->st_rdev, major(ent->stat->st_rdev), minor(ent->stat->st_rdev));
+		//printf("%d, major:%d, minor:%d\n", ent->stat->st_rdev, major(ent->stat->st_rdev), minor(ent->stat->st_rdev));
 		spaces_to_align_right(info->maxmajor, major(ent->stat->st_rdev));
 		ft_putnbr(major(ent->stat->st_rdev));
 		ft_putstr(", ");
@@ -357,7 +352,13 @@ static void				ft_disp_device(t_info *info, t_ent *ent)
 		ft_putnbr(minor(ent->stat->st_rdev));
 	}
 	else
-		return ;
+	{
+		spaces = ft_calc_total_spaces_when_device(info);
+		spaces -= ft_calc_digits((int)ent->stat->st_size);
+		while (spaces--)
+			ft_putchar(' ');
+		ft_putnbr((int)ent->stat->st_size);
+	}
 }
 
 static void				disp_details_l_part2(t_info *info, t_ent *ent)
