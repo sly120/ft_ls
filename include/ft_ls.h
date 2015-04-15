@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/12 16:55:09 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/15 23:05:13 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <uuid/uuid.h>
+#include <time.h>
 
 typedef struct		s_ent
 {
@@ -57,6 +58,7 @@ void				ft_entAdd(t_ent **entlst, t_ent *new);
 void				ft_addentlst(t_ent **entlst, char *name, struct stat *buf);
 void				ft_add_path(t_ent *ent, char *name);
 void				ft_sort_ent(t_ent **entlst);
+char				*ft_entpath(char *argpath, char *name);
 void				ft_open_dir(t_info *info, t_ent *entlst);
 int					ft_option_check(char *options, char c);
 void				ft_recursive_ls(t_info *info, t_ent *entlst);

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/04/12 17:22:03 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/15 23:03:36 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char			*ft_endpath(char *path)
 	return (++s);
 }
 
-static char			*ft_entpath(char *argpath, char *name)
+char			*ft_entpath(char *argpath, char *name)
 {
 	char			*tmp;
 	char			*dst;

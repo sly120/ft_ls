@@ -6,11 +6,23 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/13 22:27:48 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/15 23:58:13 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_ls.h>
+
+static void				ft_putstr_n(char *s, int n)
+{
+	int					i;
+
+	i = 0;
+	while (*s && i < n)
+	{
+		write(1, s++, 1);
+		i++;
+	}
+}
 
 void					ft_init_info(t_info *info, int argc, int i)
 {
@@ -361,12 +373,67 @@ static void				ft_disp_device(t_info *info, t_ent *ent)
 	}
 }
 
+static void				ft_disp_day(char *s)
+{
+	ft_putchar(' ');
+	ft_putstr_n(s + 4, 3);
+	ft_putchar(' ');
+	ft_putstr_n(s + 8, 2);
+	ft_putchar(' ');
+	ft_putstr_n(s + 11, 5);
+	ft_putchar(' ');
+}
+
+static void				ft_disp_year(char *s)
+{
+	ft_putchar(' ');
+	ft_putstr_n(s + 4, 3);
+	ft_putchar(' ');
+	ft_putstr_n(s + 8, 2);
+	ft_putchar(' ');
+	ft_putchar(' ');
+	ft_putstr_n(s + 20, 4);
+	ft_putchar(' ');
+}
+
+static void				ft_disp_link(char *path)
+{
+	char				*buf;
+	int					bufsize;
+	ssize_t				ret;
+
+	ft_putstr(" -> ");
+	if ((ret = readlink(path, buf, bufsize)) == -1)
+		return ;
+	else
+		ft_putstr_n(buf, (int)ret);
+}
+
 static void				disp_details_l_part2(t_info *info, t_ent *ent)
 {
+	char				*path;
+	time_t				a;
+
 	if (info->special)
 		ft_disp_device(info, ent);
 	else
 		ft_disp_size(info, ent);
+	time(&a);
+	//printf("time:%s\n", ctime(&ent->stat->st_mtime));
+	//printf("now:%lo, time:%lo, ", a, ent->stat->st_mtime);
+	//printf("diff:%d, condition:%d \n ", (int)(a - ent->stat->st_mtime), (int)(a - ent->stat->st_mtime) >= 15724800/* || ((int)(a - ent->stat->st_mtime < -73770399)*/ ? 1 : 0);
+	if (((int)(a - ent->stat->st_mtime) >= 15724800) || (int)(a - ent->stat->st_mtime) <= -15724800)
+		ft_disp_year(ctime(&ent->stat->st_mtime));
+	else
+		ft_disp_day(ctime(&ent->stat->st_mtime));
+	ft_putstr(ent->name);
+	if (S_ISLNK(ent->stat->st_mode))
+	{
+		//ft_display_link(ent->path);
+		path = ft_entpath(ent->path, ent->name);
+		ft_disp_link(path);
+		free(path);
+	}
 	ft_putchar('\n');
 }
 
