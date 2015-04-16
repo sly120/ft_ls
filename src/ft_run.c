@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/15 23:58:13 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/16 23:33:44 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,25 +136,48 @@ static void				print_type(mode_t m)
 	S_ISCHR(m) ? ft_putchar('c') : 0;
 	S_ISFIFO(m) ? (S_ISSOCK(m) ? ft_putchar('s') : ft_putchar('p')) : 0;
 	S_ISLNK(m) ? ft_putchar('l') : 0;
+	S_ISWHT(m) ? ft_putchar('w') : 0;
+	if (!(S_ISREG(m) || S_ISDIR(m) || S_ISBLK(m) || S_ISCHR(m) || S_ISFIFO(m)
+		|| S_ISLNK(m) || S_ISWHT(m)))
+		ft_putchar('?');
 }
 
-static void				print_permission(mode_t m)
+static void				check_acl(char *path)
 {
-	int					i;
-	int					mask;
+	acl_t				acl;
 
-	i = -1;
-	mask = 256;
-	while (++i < 9)
-	{
-		if (i % 3 == 0)
-			m & mask ? ft_putchar('r') : ft_putchar('-');
-		if (i % 3 == 1)
-			m & mask ? ft_putchar('w') : ft_putchar('-');
-		if (i % 3 == 2)
-			m & mask ? ft_putchar('x') : ft_putchar('-');
-		mask = mask >> 1;
-	}
+	if ((acl = acl_get_link_np(path, ACL_TYPE_EXTENDED)))
+		ft_putchar('+');
+	else
+		ft_putchar(' ');
+	acl_free(acl);
+}
+
+static void				print_permission(mode_t m, t_ent *ent)
+{
+	char				*p;
+
+	m & S_IRUSR ? ft_putchar('r') : ft_putchar('-');
+	m & S_IWUSR ? ft_putchar('w') : ft_putchar('-');
+	if (m & S_ISUID)
+		m & S_IXUSR ? ft_putchar('s') : ft_putchar('S');
+	else
+		m & S_IXUSR ? ft_putchar('x') : ft_putchar('-');
+	m & S_IRGRP ? ft_putchar('r') : ft_putchar('-');
+	m & S_IWGRP ? ft_putchar('w') : ft_putchar('-');
+	if (m & S_ISGID)
+		m & S_IXGRP ? ft_putchar('s') : ft_putchar('S');
+	else
+		m & S_IXGRP ? ft_putchar('x') : ft_putchar('-');
+	m & S_IROTH ? ft_putchar('r') : ft_putchar('-');
+	m & S_IWOTH ? ft_putchar('w') : ft_putchar('-');
+	if (m & S_ISVTX)
+		m & S_IXOTH ? ft_putchar('t') : ft_putchar('T');
+	else
+		m & S_IXOTH ? ft_putchar('x') : ft_putchar('-');
+	p = ft_entpath(ent->path, ent->name);
+	listxattr(p, NULL, 0, XATTR_NOFOLLOW) > 0 ? ft_putchar('@') : check_acl(p);
+	free(p);
 }
 
 static int				ft_maxlink(t_ent *ent)
@@ -443,10 +466,7 @@ void					disp_details_l(t_info *info, t_ent *ent)
 
 	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
-	print_permission(ent->stat->st_mode);
-	if (ft_strcmp(ent->path, "/dev"))
-		ft_putchar(' ');
-	ft_putchar(' ');
+	print_permission(ent->stat->st_mode, ent);
 	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putnbr(ent->stat->st_nlink);
 	if ((tmp = print_user(ent->stat->st_uid)))

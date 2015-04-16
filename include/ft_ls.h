@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/15 23:05:13 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/16 21:14:03 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #include <grp.h>
 #include <uuid/uuid.h>
 #include <time.h>
+#include <sys/acl.h>
+#include <sys/xattr.h>
 
 typedef struct		s_ent
 {
