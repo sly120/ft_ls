@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/16 23:33:44 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/17 20:24:06 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void					ft_init_info(t_info *info, int argc, int i)
 	info->maxlink = 0;
 	info->maxusername = 0;
 	info->maxgroup = 0;
+	info->maxsize = 0;
+	info->special = 0;
+	info->maxmajor = 0;
+	info->maxminor = 0;
+	info->specialspace = 0;
 }
 
 void					ft_init_inttab(int (*inttab)[2])
@@ -142,7 +147,7 @@ static void				print_type(mode_t m)
 		ft_putchar('?');
 }
 
-static void				check_acl(char *path)
+static void				print_acl(char *path)
 {
 	acl_t				acl;
 
@@ -176,7 +181,7 @@ static void				print_permission(mode_t m, t_ent *ent)
 	else
 		m & S_IXOTH ? ft_putchar('x') : ft_putchar('-');
 	p = ft_entpath(ent->path, ent->name);
-	listxattr(p, NULL, 0, XATTR_NOFOLLOW) > 0 ? ft_putchar('@') : check_acl(p);
+	listxattr(p, NULL, 0, XATTR_NOFOLLOW) > 0 ? ft_putchar('@') : print_acl(p);
 	free(p);
 }
 
@@ -290,8 +295,33 @@ static int				ft_maxsize(t_ent *entlst)
 	return (max);
 }
 
+static int				ft_specialspace(t_ent *entlst)
+{
+	acl_t				acl;
+	char				*path;
+	int					i;
+
+	i = 0;
+	while (entlst)
+	{
+	path = ft_entpath;
+	if (listxattr(path, NULL, 0, XATTR_NOFOLLOW) > 0)
+		info->specialspace = 1;
+	else
+		if (check_acl(p))
+			info->specialspace = 1;
+	free(p);
+	if ((acl = acl_get_link_np(path, ACL_TYPE_EXTENDED)))
+		i = 1;
+	}
+	acl_free(acl);
+	return (i);
+}
+
 void					getentinfo(t_info *info, t_ent *entlst)
 {
+	char				*p;
+
 	info->maxlink = ft_maxlink(entlst);
 	info->maxusername = ft_maxusername(entlst);
 	info->maxgroup = ft_maxgroup(entlst);
@@ -299,6 +329,8 @@ void					getentinfo(t_info *info, t_ent *entlst)
 		ft_getmaxspecial(info, entlst);
 	else
 		info->maxsize = ft_maxsize(entlst);
+	p = ft_entpath(entlst->path, entlst->name);
+	info->specialspace = ft_specialspace(entlst);
 }
 
 static void				spaces_to_align_right(int max, int i)
@@ -467,6 +499,7 @@ void					disp_details_l(t_info *info, t_ent *ent)
 	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode, ent);
+	info->specialspace ? 0 : ft_putchar(' ');
 	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putnbr(ent->stat->st_nlink);
 	if ((tmp = print_user(ent->stat->st_uid)))

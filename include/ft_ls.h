@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/17 05:04:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/16 21:14:03 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/17 20:02:56 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct		s_info
 	int				special;
 	int				maxminor;
 	int				maxmajor;
+	int				specialspace;
 }					t_info;
 
 void				ft_sort_charTab(char ***argv, int argc, int start);
