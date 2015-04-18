@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/17 20:24:06 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/19 00:44:33 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,23 +299,28 @@ static int				ft_specialspace(t_ent *entlst)
 {
 	acl_t				acl;
 	char				*path;
-	int					i;
 
-	i = 0;
 	while (entlst)
 	{
-	path = ft_entpath;
-	if (listxattr(path, NULL, 0, XATTR_NOFOLLOW) > 0)
-		info->specialspace = 1;
-	else
-		if (check_acl(p))
-			info->specialspace = 1;
-	free(p);
-	if ((acl = acl_get_link_np(path, ACL_TYPE_EXTENDED)))
-		i = 1;
-	}
+		path = ft_entpath(entlst->path, entlst->name);
+		if (listxattr(path, NULL, 0, XATTR_NOFOLLOW) > 0)
+		{
+			free(path);
+			acl_free(acl);
+			return (1);
+		}
+		else
+			if ((acl = acl_get_link_np(path, ACL_TYPE_EXTENDED)))
+			{
+				free(path);
+				acl_free(acl);
+				return (1);
+			}
+		free(path);
+		entlst = entlst->next;
+		}
 	acl_free(acl);
-	return (i);
+	return (0);
 }
 
 void					getentinfo(t_info *info, t_ent *entlst)
