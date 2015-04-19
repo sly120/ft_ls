@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/04 18:26:42 by sly               #+#    #+#             */
-/*   Updated: 2015/04/15 23:03:36 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/19 18:43:11 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,20 @@ void				ft_open_dir(t_info *info, t_ent *arglst)
 	{
 		while ((dirent = readdir(dstream)))
 		{
-			//ft_putstr(dirent->d_name);
+			//printf("name:%s, name[0] == '.':%d\n", dirent->d_name, (dirent->d_name)[0] != '.');
 			//printf(" d_type:%u, isdir:%d\n", dirent->d_type, dirent->d_type == DT_DIR);
 			//ft_entAdd(&entLst[0], ft_entNew(dirent->d_name));
-			entpath = ft_entpath(arglst->path, dirent->d_name);
-			ft_get_stat(entpath, &buf);
+			if (ft_option_check(info->opt, 'a') || (dirent->d_name)[0] != '.')
+			{
+				entpath = ft_entpath(arglst->path, dirent->d_name);
+				ft_get_stat(entpath, &buf);
 			//free(entpath);
-			ft_addentlst(&entlst, dirent->d_name, buf);
-			entlst->type = dirent->d_type;
-			entlst->path = ft_strdup(arglst->path);
+				ft_addentlst(&entlst, dirent->d_name, buf);
+				entlst->type = dirent->d_type;
+				entlst->path = ft_strdup(arglst->path);
 			//printf("name:%s, dir:%u, stat:%d, path:%s\n", entlst->name, entlst->type == DT_DIR, S_ISDIR(entlst->stat->st_mode), entlst->path);
-			indic[0] = 1;
+				indic[0] = 1;
+			}
 	//printf("ent:%s, mode:%d, path:%s\n", entlst->name, entlst->stat->st_mode, entlst->path);
 		}
 		ft_sort_ent(&entlst);

@@ -6,7 +6,7 @@
 /*   By: sly <sly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/25 11:26:10 by sly               #+#    #+#             */
-/*   Updated: 2015/04/19 00:44:33 by sly              ###   ########.fr       */
+/*   Updated: 2015/04/19 18:49:34 by sly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,6 +345,7 @@ static void				spaces_to_align_right(int max, int i)
 
 	maxdigits = ft_calc_digits(max);
 	digits = ft_calc_digits(i);
+	ft_putchar(' ');
 	while (digits++ < maxdigits)
 		ft_putchar(' ');
 }
@@ -394,7 +395,6 @@ static char				*print_group(gid_t gid)
 
 static void				ft_disp_size(t_info *info, t_ent *ent)
 {
-	ft_putchar(' ');
 	spaces_to_align_right(info->maxsize, (int)ent->stat->st_size);
 	ft_putnbr((int)ent->stat->st_size);
 }
@@ -405,7 +405,7 @@ static int				ft_calc_total_spaces_when_device(t_info *info)
 
 	digits = ft_calc_digits(info->maxmajor);
 	digits += ft_calc_digits(info->maxminor);
-	return (digits + 2);
+	return (digits + 3);
 }
 
 static void				ft_disp_device(t_info *info, t_ent *ent)
@@ -413,13 +413,12 @@ static void				ft_disp_device(t_info *info, t_ent *ent)
 	int					spaces;
 
 	ft_putchar(' ');
-	ft_putchar(' ');
 	if (S_ISCHR(ent->stat->st_mode) || S_ISBLK(ent->stat->st_mode))
 	{
 		//printf("%d, major:%d, minor:%d\n", ent->stat->st_rdev, major(ent->stat->st_rdev), minor(ent->stat->st_rdev));
 		spaces_to_align_right(info->maxmajor, major(ent->stat->st_rdev));
 		ft_putnbr(major(ent->stat->st_rdev));
-		ft_putstr(", ");
+		ft_putstr(",");
 		spaces_to_align_right(info->maxminor, minor(ent->stat->st_rdev));
 		ft_putnbr(minor(ent->stat->st_rdev));
 	}
@@ -504,7 +503,7 @@ void					disp_details_l(t_info *info, t_ent *ent)
 	//printf("ent:%s, mode:%d\n", ent->path, ent->stat->st_mode);
 	print_type(ent->stat->st_mode);
 	print_permission(ent->stat->st_mode, ent);
-	info->specialspace ? 0 : ft_putchar(' ');
+	//info->specialspace ? 0 : ft_putchar(' ');
 	spaces_to_align_right(info->maxlink, ent->stat->st_nlink);
 	ft_putnbr(ent->stat->st_nlink);
 	if ((tmp = print_user(ent->stat->st_uid)))
